@@ -18,6 +18,12 @@ django-tables2
 django-crispy-forms
 django-bootstrap3-datetimepicker
 django-geojson
+django-localeurl
+django-modeltranslation
 # dev
 django-extensions==1.3.3
 Werkzeug
+ipython
+pyzmq
+jinja2
+tornado

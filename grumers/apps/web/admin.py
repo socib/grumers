@@ -4,6 +4,7 @@ from django.contrib.flatpages.models import FlatPage
 from django.db.models import TextField
 from ckeditor.widgets import CKEditorWidget
 from mptt.admin import MPTTModelAdmin
+from modeltranslation.admin import TranslationAdmin
 import models
 
 
@@ -13,17 +14,19 @@ class PageForm(FlatpageForm):
         model = models.Page
 
 
-class PageAdmin(MPTTModelAdmin, FlatPageAdmin):
+class PageAdmin(MPTTModelAdmin, TranslationAdmin, FlatPageAdmin):
     form = PageForm
     formfield_overrides = {TextField: {'widget': CKEditorWidget(config_name='default')}, }
     filter_horizontal = ('related',)
     fieldsets = (
         (None, {
-            'fields': ('parent', 'url', 'title', 'title_menu', 'introduction', 'content', 'sites')
+            'fields': ('parent', 'url', 'title', 'title_menu', 'introduction',
+                       'content', 'sites')
         }),
         ('Advanced options', {
             'classes': ('collapse',),
-            'fields': ('related', 'enable_comments', 'registration_required', 'template_name')
+            'fields': ('related', 'enable_comments',
+                       'registration_required', 'template_name')
         }),
     )
 admin.site.unregister(FlatPage)

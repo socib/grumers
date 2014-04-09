@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'bootstrap3_datetime',
     'djgeojson',
     'localeurl',
+    'modeltranslation',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -165,3 +166,9 @@ CKEDITOR_CONFIGS = {
 }
 LOCALEURL_USE_ACCEPT_LANGUAGE = True
 LOCALEURL_USE_SESSION = True
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+MODELTRANSLATION_FALLBACK_LANGUAGES = {
+    'default': ('en', 'ca', 'es'),
+    'es': ('ca',),
+    'ca': ('es',),
+}
