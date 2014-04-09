@@ -1,0 +1,35 @@
+"""
+Example settings for local development
+
+Use this file as a base for your local development settings and copy
+it to geosample/settings/local.py. It should not be checked into
+your code repository.
+
+"""
+from geosample.settings.base import *   # pylint: disable=W0614,W0401
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+ADMINS = (
+    ('You', 'your@email'),
+)
+MANAGERS = ADMINS
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'geosample_test',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    }
+}
+
+INSTALLED_APPS += (
+    'django_extensions',
+)
+
+# ROOT_URLCONF = 'geosample.urls.local'
+# WSGI_APPLICATION = 'geosample.wsgi.local.application'

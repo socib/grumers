@@ -1,0 +1,24 @@
+{% extends "web/base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title_head %}{{ block.super }}: {{ page.title }}{% endblock %}
+
+{% block title %}
+{{ page.title }}
+{% endblock %}
+
+{% block content %}
+{{ page.content|safe }}
+
+<ul>
+{% for observation in current_page.object_list %}
+  <li>{{ observation.phenomenon_type }} | {{ observation.date_observed }}</li>
+{% empty %}
+  <li>
+    There are observations.
+  </li>
+{% endfor %}
+</ul>
+{% endblock %}
+

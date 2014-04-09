@@ -1,0 +1,15 @@
+{% extends "web/base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title_head %}{{ block.super }}: {% trans 'Home' %}{% endblock %}
+
+{% block title %}
+Welcome to our project!
+{% endblock %}
+
+{% block content %}
+<p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse est sapien, cursus et urna ac, euismod dictum tortor. In blandit ante bibendum ipsum posuere commodo. Maecenas ornare eros ac dapibus sagittis. Nulla sed iaculis tellus. Maecenas egestas arcu lectus, in elementum urna interdum a. Suspendisse egestas tincidunt convallis. Duis justo dui, mollis vel lorem quis, fringilla consectetur tellus. Nam varius felis nunc, et tempor tortor rutrum nec. Nulla et lacus non massa placerat dignissim. Nunc venenatis augue nisl, eget elementum arcu consequat ut. Donec mattis dignissim neque, ac iaculis leo dignissim vitae. Quisque enim nisi, lacinia nec bibendum vitae, posuere aliquet orci. Cras id consequat mi, vitae rhoncus risus.</p>
+
+<p class="lead">Nulla dui elit, iaculis id ultricies id, malesuada vel dolor. Aliquam tempus aliquet tristique. Sed eu tincidunt tortor. Mauris fringilla laoreet porta. Integer non ligula lectus. Aenean sit amet ornare urna. Nunc orci quam, aliquet sit amet pulvinar quis, sagittis sed sapien. Cras dapibus sapien a hendrerit faucibus. Suspendisse eget elit dictum, consectetur turpis tempor, lacinia libero. Aliquam erat volutpat.</p>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "data/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% load geojson_tags %}
+
+{% block title_head %}{{ block.super }}: {% trans "Update Observation" %}{% endblock %}
+
+{% block title %}
+{% trans "Update Observation" %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-7">
+    {% crispy form %}
+  </div>
+  <div class="col-sm-5">
+    <div id="map-route" style="width:100%; height:300px;">
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+  <script src="{% static "js/open_layers/OpenLayers.js" %}"></script>
+  {{ form.media }}
+  <script type="text/javascript">
+    $(function() {
+        var map_options = {
+          projection: new OpenLayers.Projection("EPSG:3857"),
+          displayProjection: new OpenLayers.Projection("EPSG:4326")
+        };
+        var lon = 3;
+        var lat = 39.4;
+        var zoom = 8;
+        var map = new OpenLayers.Map('map-route', map_options);
+        var osmLayer =  new OpenLayers.Layer.OSM();
+        var stationDefaultStyle = new OpenLayers.Style({
+            fill: true,
+            fillOpacity: 0.6,
+            fillColor: "#2a37ff",
+            strokeColor: "#2a37ff",
+            strokeWidth: 0.5,
+            strokeOpacity: 0.8,
+            strokeDashstyle: 'solid',
+            pointRadius: 5
+        });
+        var stationSelectedStyle = new OpenLayers.Style({
+            pointRadius: 10,
+            strokeWidth: 2,
+            strokeOpacity: 1,
+            fillColor: "#e0d01e"
+        });
+        var stationPointStyle = new OpenLayers.StyleMap({
+            'default': stationDefaultStyle,
+            'select': stationSelectedStyle
+        });
+        var stationsLayer = new OpenLayers.Layer.Vector("Stations", {
+            styleMap: stationPointStyle,
+            preFeatureInsert: function(feature) {
+                feature.geometry.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+            }
+        });
+        map.addLayers([stationsLayer, osmLayer]);
+        var geojsonFormat = new OpenLayers.Format.GeoJSON();
+        var collection = geojsonFormat.read({{ station_list|geojsonfeature:"position"|safe }});
+        stationsLayer.addFeatures(collection);
+
+        var layerSwitcher = new OpenLayers.Control.LayerSwitcher();
+        map.addControl(layerSwitcher);
+        map.addControl(new OpenLayers.Control.MousePosition({
+            prefix: '<div style=\"color: black; font-size: 12px; font-weight: bold; background-color: white; padding: 0px 10px;\">',
+            suffix: '</div>'
+        }));
+
+        var selectFeatureControl = new OpenLayers.Control.SelectFeature(stationsLayer, {
+            multiple: false,
+            onSelect: _onFeatureSelect,
+            'displayClass': 'olControlDrawFeaturePoint'
+        });
+        map.addControl(selectFeatureControl);
+        selectFeatureControl.activate();
+
+
+        var newCenterProjected = (new OpenLayers.LonLat(lon, lat)).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+        map.setCenter(newCenterProjected, zoom);
+        map.zoomToExtent(stationsLayer.getDataExtent());
+
+        function _onFeatureSelect(feature) {
+          $("select[name=observation_station]").val(feature.fid);
+        }
+
+        function selectFeature(id) {
+            var length = stationsLayer.features.length;
+            for (var i = 0; i < length; i++) {
+                var feature = stationsLayer.features[i];
+                if (feature.fid == id) {
+                    selectFeatureControl.select(feature);
+                }else{
+                    selectFeatureControl.unselect(feature);
+                }
+            }
+        }
+
+        $("select[name=observation_station]").change(function(){
+          selectFeature(this.value);
+        });
+        selectFeature($("select[name=observation_station]").val());
+    });
+  </script>
+{% endblock page_js %}
+

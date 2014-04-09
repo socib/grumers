@@ -1,0 +1,5 @@
+*.pyc
+*.egg-info
+geosample/settings/local.py
+geosample/settings/local/*
+docs/_build
