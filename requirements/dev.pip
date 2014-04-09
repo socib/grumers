@@ -1,0 +1,8 @@
+-r common.pip
+
+django-extensions==1.3.3
+Werkzeug
+ipython
+pyzmq
+jinja2
+tornado

@@ -27,7 +27,7 @@ To configure the project in development::
     mkvirtualenv grumers --no-site-packages
     workon grumers
     cd path/to/grumers/repository
-    pip install -r requirements.pip
+    pip install -r requirements/dev.pip
     pip install -e .
     cp grumers/settings/local.py.example grumers/settings/local.py
     python manage.py syncdb
