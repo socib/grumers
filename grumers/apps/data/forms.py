@@ -16,8 +16,8 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
         model = models.JellyfishObservation
         fields = [
             'date_observed',
-            'jellyfish_specie',
             'observation_station',
+            'jellyfish_specie',
             'quantity',
             'remarks',
         ]

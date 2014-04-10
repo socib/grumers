@@ -65,7 +65,7 @@ class ObservationStation(models.Model):
     name = models.CharField(_('name'), max_length=100)
     observation_route = models.ForeignKey(ObservationRoute, on_delete=models.PROTECT,
                                           verbose_name=_('observation route'))
-    order = models.IntegerField('order in route')
+    order = models.IntegerField(_('order in route'))
     position = models.PointField(srid=4326, verbose_name=_('position'))
     # Audit
     created_on = models.DateTimeField(_('date added'), auto_now_add=True)

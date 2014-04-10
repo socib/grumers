@@ -19,6 +19,11 @@ This project includes bootstrap less files, which are compiled into css via djan
 You will also need an spatial database (see `geodjango requirements <https://docs.djangoproject.com/en/dev/ref/contrib/gis/install/#requirements>`_ ).
 
 
+System packages::
+
+    libgeos-3.2.0
+    libgeos-dev
+
 Quickstart
 ----------
 

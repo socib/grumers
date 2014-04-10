@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-04-10 14:28+0200\n"
-"PO-Revision-Date: 2014-04-10 14:29+0100\n"
+"PO-Revision-Date: 2014-04-10 14:37+0100\n"
 "Last-Translator: Biel Frontera <bfrontera@socib.es>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,34 +19,34 @@ msgstr ""
 
 #: apps/data/forms.py:13
 msgid "Update"
-msgstr "Actualitza"
+msgstr "Actualiza"
 
 #: apps/data/forms.py:28
 msgid "Fill jellyfish specie or set quantity to none"
-msgstr "Omple espècie o posa la quantitat a zero"
+msgstr "Informa la especie de medusa o deja la cantidad a cero"
 
 #: apps/data/forms.py:35
 msgid "Fill quantity or set specie to none"
-msgstr "Indica la quantita o deixa la espècie buida"
+msgstr "Indica la cantidad o deja en blanco la especie"
 
 #: apps/data/forms.py:50
 #, python-format
 msgid "%s observation"
-msgstr "%s observació"
+msgstr "%s observación"
 
 #: apps/data/forms.py:55
 msgid "Create observation and continue with next station"
-msgstr "Desa i segueix amb la següent estació"
+msgstr "Guarda y pasa a la siguiente estación"
 
 #: apps/data/forms.py:60
 msgid "Cancel"
-msgstr "Cancel·la"
+msgstr "Cancela"
 
 #: apps/data/forms.py:77
 #: apps/data/models.py:107
 #: apps/data/models.py:149
 msgid "None"
-msgstr "Cap"
+msgstr "Ninguna"
 
 #: apps/data/forms.py:92
 msgid "Create"
@@ -54,11 +54,11 @@ msgstr "Crea"
 
 #: apps/data/forms.py:102
 msgid "specie"
-msgstr "espècie"
+msgstr "especie"
 
 #: apps/data/forms.py:103
 msgid "Specie: all"
-msgstr "Espècie: totes"
+msgstr "Especie: todas"
 
 #: apps/data/forms.py:107
 #: apps/data/models.py:15
@@ -66,40 +66,40 @@ msgstr "Espècie: totes"
 #: apps/data/models.py:74
 #: apps/data/models.py:131
 msgid "created by"
-msgstr "creat per"
+msgstr "creado por"
 
 #: apps/data/forms.py:108
 msgid "User: all"
-msgstr "Usuari: tots"
+msgstr "Usuario: todos"
 
 #: apps/data/forms.py:112
 #: apps/data/models.py:50
 #: apps/data/models.py:67
 msgid "observation route"
-msgstr "ruta d'observació"
+msgstr "ruta de observación"
 
 #: apps/data/forms.py:113
 msgid "Route: all"
-msgstr "Ruta: totes"
+msgstr "Ruta: todas"
 
 #: apps/data/forms.py:117
 #: apps/data/models.py:83
 #: apps/data/models.py:118
 msgid "observation station"
-msgstr "punt d'observació"
+msgstr "punto de observación"
 
 #: apps/data/forms.py:118
 msgid "Station: all"
-msgstr "Estacions: totes"
+msgstr "Puntos: todos"
 
 #: apps/data/forms.py:121
 #: apps/data/models.py:123
 msgid "source"
-msgstr "font"
+msgstr "fuente"
 
 #: apps/data/forms.py:122
 msgid "from date"
-msgstr "des de data"
+msgstr "desde fecha"
 
 #: apps/data/forms.py:130
 msgid "Filter"
@@ -107,11 +107,11 @@ msgstr "Filtra"
 
 #: apps/data/models.py:7
 msgid "scientific name"
-msgstr "nom científic"
+msgstr "nombre científico"
 
 #: apps/data/models.py:8
 msgid "common name"
-msgstr "nom comú"
+msgstr "nombre común"
 
 #: apps/data/models.py:9
 msgid "slug"
@@ -120,62 +120,62 @@ msgstr "slug"
 #: apps/data/models.py:10
 #: apps/data/models.py:38
 msgid "description"
-msgstr "descripció"
+msgstr "descripción"
 
 #: apps/data/models.py:12
 #: apps/data/models.py:40
 #: apps/data/models.py:71
 #: apps/data/models.py:128
 msgid "date added"
-msgstr "afegit en data"
+msgstr "fecha alta"
 
 #: apps/data/models.py:16
 #: apps/data/models.py:44
 #: apps/data/models.py:75
 #: apps/data/models.py:132
 msgid "date modified"
-msgstr "modificat en data"
+msgstr "fecha modificación"
 
 #: apps/data/models.py:19
 #: apps/data/models.py:47
 #: apps/data/models.py:78
 #: apps/data/models.py:135
 msgid "update by"
-msgstr "actualitzat per"
+msgstr "actualizado por"
 
 #: apps/data/models.py:22
 #: apps/data/models.py:121
 msgid "jellyfish specie"
-msgstr "espècie de grumer"
+msgstr "especie de medusa"
 
 #: apps/data/models.py:23
 msgid "jellyfish species"
-msgstr "espècies de grumers"
+msgstr "especies de medusa"
 
 #: apps/data/models.py:37
 #: apps/data/models.py:65
 msgid "name"
-msgstr "nom"
+msgstr "nombre"
 
 #: apps/data/models.py:51
 msgid "observation routes"
-msgstr "rutes d'observació"
+msgstr "rutas de observación"
 
 #: apps/data/models.py:68
 msgid "order in route"
-msgstr "ordre a la ruta"
+msgstr "orden en la ruta"
 
 #: apps/data/models.py:69
 msgid "position"
-msgstr "localització"
+msgstr "posición"
 
 #: apps/data/models.py:84
 msgid "observation stations"
-msgstr "punts d'observació"
+msgstr "punto de observación"
 
 #: apps/data/models.py:101
 msgid "Web Form"
-msgstr "Formulari web"
+msgstr "Formulario web"
 
 #: apps/data/models.py:102
 msgid "API"
@@ -183,11 +183,11 @@ msgstr "API"
 
 #: apps/data/models.py:103
 msgid "Bulk upload"
-msgstr "Importació massiva"
+msgstr "importación masiva"
 
 #: apps/data/models.py:108
 msgid "5 or less"
-msgstr "5 o menys"
+msgstr "5 o menos"
 
 #: apps/data/models.py:109
 msgid "5 to 15"
@@ -203,109 +203,109 @@ msgstr "30 a 60"
 
 #: apps/data/models.py:112
 msgid "60 to 100"
-msgstr "60 a 100"
+msgstr "30 a 100"
 
 #: apps/data/models.py:113
 msgid "100 or more"
-msgstr "100 o més"
+msgstr "100 o más"
 
 #: apps/data/models.py:116
 msgid "date observed"
-msgstr "data observació"
+msgstr "fecha observación"
 
 #: apps/data/models.py:122
 msgid "quantity observed"
-msgstr "quantitat observada"
+msgstr "cantidad observada"
 
 #: apps/data/models.py:126
 msgid "remarks"
-msgstr "comentaris"
+msgstr "comentarios"
 
 #: apps/data/models.py:138
 msgid "jellyfish observation"
-msgstr "observació de grumers"
+msgstr "observación de medusas"
 
 #: apps/data/models.py:139
 msgid "jellyfish observations"
-msgstr "observacions de grumers"
+msgstr "observaciones de medusas"
 
 #: apps/data/views.py:80
 msgid "Observation created"
-msgstr "Observació creada"
+msgstr "Observación creada"
 
 #: apps/data/views.py:106
 msgid "Observation updated"
-msgstr "Observació actualitzada"
+msgstr "Observaciçon actualizada"
 
 #: apps/data/views.py:128
 msgid "Observation deleted"
-msgstr "Observació esborrada"
+msgstr "Observación borrada"
 
 #: apps/web/models.py:8
 msgid "Short title for menu"
-msgstr "Títol per al menú"
+msgstr "Título corto para el menú"
 
 #: apps/web/models.py:9
 msgid "Introduction"
-msgstr "Introducció"
+msgstr "Introducción"
 
 #: apps/web/models.py:12
 msgid "related pages"
-msgstr "pàgines relacionades"
+msgstr "páginas relacionadas"
 
 #: apps/web/views.py:50
 msgid "Page not found"
-msgstr "Pàgina no trobada"
+msgstr "Página no encontrada"
 
 #: templates/_header_nav.html:38
 msgid "Logout"
-msgstr "Surt"
+msgstr "Salir"
 
 #: templates/_header_nav.html:43
 #: templates/registration/login.html:7
 #: templates/registration/login.html:37
 msgid "Login"
-msgstr "Identificació"
+msgstr "Identificación"
 
 #: templates/_header_nav.html:47
 msgid "Change language"
-msgstr "Canvia l'idioma"
+msgstr "Cambiar idioma"
 
 #: templates/data/jellyfishobservation_create.html:5
 #: templates/data/jellyfishobservation_create.html:8
 msgid "Create Observation"
-msgstr "Crea observació"
+msgstr "Alta de observación"
 
 #: templates/data/jellyfishobservation_list.html:6
 #: templates/data/jellyfishobservation_list.html:12
 msgid "Observation List"
-msgstr "Llista d'observacions"
+msgstr "Lista de observaciones"
 
 #: templates/data/jellyfishobservation_list.html:23
 #: templates/data/jellyfishobservation_list.html:25
 msgid "Add"
-msgstr "Afegeix"
+msgstr "Nueva"
 
 #: templates/data/jellyfishobservation_list.html:23
 #: templates/data/jellyfishobservation_list.html:25
 msgid "observation"
-msgstr "observació"
+msgstr "observación"
 
 #: templates/data/jellyfishobservation_update.html:7
 #: templates/data/jellyfishobservation_update.html:10
 msgid "Update Observation"
-msgstr "Actualitza observació"
+msgstr "Actualiza"
 
 #: templates/data/observationroute_list.html:6
 #: templates/data/observationroute_list.html:9
 msgid "Route List"
-msgstr "Llista de rutes"
+msgstr "Lista de rutas"
 
 #: templates/registration/login.html:11
 msgid "Your username and password didn"
-msgstr "Usuari i password no coincideixen"
+msgstr "Tu usuario y contrasenña no coinciden"
 
 #: templates/web/home.html:5
 msgid "Home"
-msgstr "Inici"
+msgstr "Inicio"
 
