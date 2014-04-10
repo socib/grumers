@@ -1,14 +1,47 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>{% block head_title %}{% endblock %}</title>
+{% load i18n %}
+{% load staticfiles %}
+{% load compress %}
+<html lang="en">
+  <head>
     <meta charset="utf-8">
-</head>
-<body>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/static/favicon.ico">
 
-<div id="container">
-    Server Error
-</div>
+    <title>{% block head_title %}Grumers{% endblock %}</title>
 
-</body>
+    {% block css %}
+      {% compress css %}
+        <link type="text/less" href="{% static "bootstrap/less/bootstrap.less" %}" rel="stylesheet" >
+      {% endcompress %}
+      {% compress css %}
+        <link type="text/less" href="{% static "css/style.less" %}" rel="stylesheet" />
+      {% endcompress %}
+      <link type="text/css" href="{% static "css/datepicker.css" %}" rel="stylesheet" />
+    {% endblock css %}
+    {% block page_css %}{% endblock page_css %}
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h1>{% block title %}Grumers{% endblock %}</h1>
+      </div>
+      <div class="content">
+        {% trans "Server error" %}
+      </div>
+    </div>
+    <div id="footer">
+    </div>
+  </body>
 </html>
