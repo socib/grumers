@@ -23,6 +23,7 @@ System packages::
 
     libgeos-3.2.0
     libgeos-dev
+    binutils libproj-dev gdal-bin
 
 Quickstart
 ----------

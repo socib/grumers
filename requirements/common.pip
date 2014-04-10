@@ -12,7 +12,7 @@ psycopg2==2.5.2
 six==1.6.1
 wsgiref==0.1.2
 django-mptt
-django-ckeditor
+django-ckeditor-updated
 django-compressor
 django-tables2
 django-crispy-forms
