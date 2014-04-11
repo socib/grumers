@@ -217,3 +217,4 @@ MODELTRANSLATION_FALLBACK_LANGUAGES = {
     'es': ('ca',),
     'ca': ('es',),
 }
+GEOJSON_DEFAULT_SRID = 4326

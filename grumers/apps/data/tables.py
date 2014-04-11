@@ -4,7 +4,13 @@ import models
 
 
 class JellyfishObservationTable(tables.Table):
-    date_observed = tables.LinkColumn('data_observation_update', args=[A('pk')])
+    # LinkColum does not work with localeurl
+    # date_observed = tables.LinkColumn('data_observation_update', args=[A('pk')])
+    date_observed = tables.TemplateColumn(
+        """<a href="{% url 'data_observation_update' record.pk %}">
+            {{ record.date_observed|date:'d/m/Y H:i'}}
+            </a>
+        """)
     observation_station = tables.Column()
     jellyfish_specie = tables.Column()
     quantity = tables.Column()
@@ -34,7 +40,11 @@ class JellyfishObservationTable(tables.Table):
 
 
 class ObservationRouteTable(tables.Table):
-    name = tables.LinkColumn('data_route_observation_list', args=[A('pk')])
+    name = tables.TemplateColumn(
+        """<a href="{% url 'data_route_observation_list' record.pk %}">
+            {{ record.name }}
+            </a>
+        """)
     description = tables.TemplateColumn(
         '{{ record.description|truncatewords_html:20|safe }}')
     create_observation = tables.TemplateColumn(
