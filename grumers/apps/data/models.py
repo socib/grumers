@@ -1,6 +1,17 @@
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.utils.html import strip_tags
+from sorl.thumbnail import get_thumbnail
+import os
+
+
+def generate_image_path(path):
+    def wrapper(instance, filename):
+        ext = filename.split('.')[-1]
+        filename = '{}.{}'.format(instance.picture_name, ext)
+        return os.path.join(path, filename)
+    return wrapper
 
 
 class JellyfishSpecie(models.Model):
@@ -8,6 +19,9 @@ class JellyfishSpecie(models.Model):
     common_name = models.CharField(_('common name'), max_length=100)
     slug = models.SlugField(_('slug'), max_length=100, unique=True)
     description = models.TextField(_('description'))
+    picture = models.ImageField(_('picture'),
+                                upload_to=generate_image_path('jellyfish_species/'),
+                                default='jellyfish_species/no-img.jpg')
     # Audit
     created_on = models.DateTimeField(_('date added'), auto_now_add=True)
     created_by = models.ForeignKey(User, blank=True, null=True,
@@ -31,6 +45,29 @@ class JellyfishSpecie(models.Model):
         if not self.id:
             self.created_by = user
         return super(JellyfishSpecie, self).save(*args, **kwargs)
+
+    @property
+    def picture_name(self):
+        return self.slug
+
+    @property
+    def basic_dict(self):
+        """
+        Export this model to a dict compatible with JSON representation
+        """
+
+        im = get_thumbnail(self.picture, '50x50', crop='center', quality=99)
+
+        obj = {
+            "id": self.pk,
+            "name": self.name,
+            "common_name": self.common_name,
+            "description": strip_tags(self.description),
+            "picture": self.picture.url,
+            "thumbnail": im.url,
+        }
+
+        return obj
 
 
 class ObservationRoute(models.Model):
@@ -105,11 +142,10 @@ class JellyfishObservation(models.Model):
 
     QUANTITY_CHOICES = (
         (0, _('None')),
-        (5, _('5 or less')),
-        (10, _('5 to 15')),
-        (22, _('15 to 30')),
-        (45, _('30 to 60')),
-        (80, _('60 to 100')),
+        (1, _('One')),
+        (3, _('2 to 5')),
+        (8, _('6 to 10')),
+        (50, _('11 to 99')),
         (110, _('100 or more')),
     )
 
@@ -120,6 +156,9 @@ class JellyfishObservation(models.Model):
                                          blank=True, null=True,
                                          verbose_name=_('jellyfish specie'))
     quantity = models.IntegerField(_('quantity observed'), blank=True)
+    picture = models.ImageField(_('picture'),
+                                upload_to=generate_image_path('jellyfish_observations/'),
+                                null=True, blank=True)
     source = models.CharField(_('source'), max_length=2,
                               choices=SOURCE_CHOICES,
                               default=WEBFORM, blank=False)
@@ -149,7 +188,7 @@ class JellyfishObservation(models.Model):
         specie = _('None')
         if self.jellyfish_specie:
             specie = self.jellyfish_specie.name
-        return "{specie} on {date:%d/%m/%Y}".format(
+        return "{specie} on {date:%d/%m/%Y}: {qty}".format(
             specie=specie,
             date=self.date_observed,
             qty=self.quantity)
@@ -160,3 +199,13 @@ class JellyfishObservation(models.Model):
         if not self.id:
             self.created_by = user
         return super(JellyfishObservation, self).save(*args, **kwargs)
+
+    @property
+    def picture_name(self):
+        specie = 'None'
+        if self.jellyfish_specie:
+            specie = self.jellyfish_specie.slug
+        return "{date:%Y%m%d-%H%M}-{specie}-{qty}".format(
+            specie=specie,
+            date=self.date_observed,
+            qty=self.quantity)

@@ -39,4 +39,8 @@ urlpatterns = patterns(
         views.ObservationRouteList.as_view(),
         name='data_route_list',
         ),
+    url(r'^species/list.json$',
+        views.JSONJellyfishSpecieList.as_view(),
+        name='data_species_json',
+        ),
 )

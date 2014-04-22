@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'djgeojson',
     'localeurl',
     'modeltranslation',
+    'sorl.thumbnail',
 
     'django.contrib.auth',
     'django.contrib.contenttypes',

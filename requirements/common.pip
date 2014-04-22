@@ -20,3 +20,4 @@ django-bootstrap3-datetimepicker
 django-geojson
 django-localeurl
 django-modeltranslation
+sorl-thumbnail

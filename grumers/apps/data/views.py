@@ -3,12 +3,15 @@ from grumers.apps.web.views import BasePageView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic.list import BaseListView
 from django_tables2.views import SingleTableView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.utils import simplejson as json
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from datetime import datetime
 import models
 import forms
 import tables
@@ -25,6 +28,10 @@ class JellyfishObservationMixin(BasePageView):
     def dispatch(self, request, *args, **kwargs):
         self.station = request.GET.get('station', None)
         self.route = kwargs.get('pk_route', None)
+        self.date = request.GET.get('date', None)
+        if self.date:
+            self.date = datetime.strptime(self.date, '%Y%m%d%H%M')
+            print 'date:', self.date
         self.next_station = None
         return super(JellyfishObservationMixin, self).dispatch(request, *args, **kwargs)
 
@@ -49,16 +56,17 @@ class JellyfishObservationMixin(BasePageView):
         return kwargs
 
     def get_success_url(self):
-        print "Route a get_succes es: ", self.route
         if self.next_station:
             if self.route:
-                return "{url}?station={next_station}".format(
+                return "{url}?station={next_station}&date={date:%Y%m%d%H%M}".format(
                     url=reverse('data_route_observation_create',
                                 args=[self.route]),
-                    next_station=self.next_station)
-            return "{url}?station={next_station}".format(
+                    next_station=self.next_station,
+                    date=self.object.date_observed)
+            return "{url}?station={next_station}&date={date:%Y%m%d%H%M}".format(
                 url=reverse('data_observation_create'),
-                next_station=self.next_station)
+                next_station=self.next_station,
+                date=self.object.date_observed)
         if self.route:
             return reverse('data_route_observation_list', args=[self.route])
         return reverse('data_observation_list')
@@ -89,6 +97,15 @@ class JellyfishObservationCreate(JellyfishObservationMixin, CreateView):
                 self.next_station = station[0].pk
 
         return super(JellyfishObservationCreate, self).form_valid(form)
+
+    def get_initial(self):
+        initial = super(JellyfishObservationCreate, self).get_initial()
+        initial = initial.copy()
+        if self.date:
+            initial['date_observed'] = self.date
+        else:
+            initial['date_observed'] = datetime.now()
+        return initial
 
 
 class JellyfishObservationUpdate(JellyfishObservationMixin, UpdateView):
@@ -207,3 +224,20 @@ class ObservationRouteList(BasePageView, SingleTableView):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super(ObservationRouteList, self).dispatch(request, *args, **kwargs)
+
+
+class JSONJellyfishSpecieList(BaseListView):
+
+    def get_queryset(self):
+        return models.JellyfishSpecie.objects.all()
+
+    def render_to_response(self, context):
+        "Returns a JSON response"
+        species = [specie.basic_dict for specie in self.get_queryset()]
+        return self.get_json_response(json.dumps(species))
+
+    def get_json_response(self, content, **httpresponse_kwargs):
+        "Construct an `HttpResponse` object."
+        return HttpResponse(content,
+                            content_type='application/json',
+                            **httpresponse_kwargs)

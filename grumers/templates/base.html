@@ -17,10 +17,12 @@
       {% compress css %}
         <link type="text/less" href="{% static "bootstrap/less/bootstrap.less" %}" rel="stylesheet" >
       {% endcompress %}
+      <link type="text/css" href="{% static "css/datepicker.css" %}" rel="stylesheet" />
+      <link href="{% static "js/vendors/select2/select2.css" %}" rel="stylesheet">
+      <link href="{% static "js/vendors/select2/select2-bootstrap.css" %}" rel="stylesheet">
       {% compress css %}
         <link type="text/less" href="{% static "css/style.less" %}" rel="stylesheet" />
       {% endcompress %}
-      <link type="text/css" href="{% static "css/datepicker.css" %}" rel="stylesheet" />
     {% endblock css %}
     {% block page_css %}{% endblock page_css %}
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -60,6 +62,7 @@
       </div>
     </div>
     <script src="{% static "js/bootstrap-datepicker.js" %}"></script>
+    <script src="{% static "js/vendors/select2/select2.min.js" %}"></script>
     <script type="text/javascript">
       $(function() {
         $('.dateinput').datepicker({
@@ -74,6 +77,11 @@
           if (parent.get(0).tagName == 'LI' && !parent.hasClass('change-lang')){
             parent.addClass('active');
           }
+        });
+        // Select2
+        $("select").each( function( index, element ){
+            if (!$(this).attr("readonly") && !$(this).attr("ignore-select2"))
+              $(this).select2();
         });
 
       });

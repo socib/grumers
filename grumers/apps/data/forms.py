@@ -1,3 +1,4 @@
+ # coding: utf-8
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -5,7 +6,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from bootstrap3_datetime.widgets import DateTimePicker
 
-from datetime import datetime
 import models
 
 
@@ -19,6 +19,7 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
             'observation_station',
             'jellyfish_specie',
             'quantity',
+            'picture',
             'remarks',
         ]
 
@@ -72,8 +73,8 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
         self.fields['date_observed'].widget = DateTimePicker(
             options={"format": "YYYY-MM-DD HH:mm",
                      "pickSeconds": False})
-        self.fields['date_observed'].initial = datetime.now()
         self.fields['remarks'].widget.attrs['rows'] = 4
+        self.fields['jellyfish_specie'].widget.attrs['class'] = 'ignore-select2'
         self.fields['jellyfish_specie'].empty_label = _('None')
         if station:
             self.fields['observation_station'].initial = station

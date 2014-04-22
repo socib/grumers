@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 {% load geojson_tags %}
+{% load thumbnail %}
 
 {% block title_head %}{{ block.super }}: {% trans "Update Observation" %}{% endblock %}
 
@@ -17,8 +18,13 @@
   </div>
   <div class="col-sm-5">
     <div id="map-route" style="width:100%; height:300px;">
-
     </div>
+    {% if object.picture %}
+        <h2>{% trans "Picture" %}</h2>
+        {% thumbnail object.picture "450" as im %}
+            <img src="{{ im.url }}">
+        {% endthumbnail %}
+    {% endif %}
   </div>
 </div>
 {% endblock %}
@@ -90,6 +96,7 @@
 
         function _onFeatureSelect(feature) {
           $("select[name=observation_station]").val(feature.fid);
+          $("select[name=observation_station]").select2("val", feature.fid);
         }
 
         function selectFeature(id) {
@@ -108,6 +115,61 @@
           selectFeature(this.value);
         });
         selectFeature($("select[name=observation_station]").val());
+
+        // Jellifish selector
+        var jellyfishSpecies = [];
+        function select2JellyfishSpecie(data){
+            jellyfishSpecies = data;
+            $("select[name=jellyfish_specie]").select2({
+                formatResult: jellyfishFormatResult,
+                formatSelection: jellyfishFormatSelection
+            });
+        }
+
+        $.getJSON('{% url 'data_species_json' %}', select2JellyfishSpecie);
+
+id: ""
+locked: false
+text: "Cap"
+
+        function jellyfishSearch(specieId) {
+            if (!specieId)
+                return null;
+            var specie = null;
+            var i = 0, l = jellyfishSpecies.length;
+            while (specie === null || i < l){
+                if (jellyfishSpecies[i].id == specieId){
+                    specie = jellyfishSpecies[i];
+                }
+                i++;
+            }
+            return specie;
+        }
+
+        function jellyfishFormatResult(value) {
+            var specie = jellyfishSearch(value.id);
+            if (specie === null)
+                return value.text;
+
+            var markup = "<table class='jellyfish-result'><tr>";
+            if (specie.thumbnail !== undefined ) {
+                markup += "<td class='jellyfish-image'><img src='" + specie.thumbnail + "'/></td>";
+            }
+            markup += "<td class='jellyfish-info'><div class='jellyfish-name'>" + specie.name + "</div>";
+            if (specie.common_name !== undefined) {
+                markup += "<div class='jellyfish-commonname'>" + specie.common_name + "</div>";
+            }
+            markup += "</td></tr></table>";
+            return markup;
+        }
+
+        function jellyfishFormatSelection(value) {
+            var specie = jellyfishSearch(value.id);
+            if (specie === null)
+                return value.text;
+            return specie.name;
+        }
+
     });
   </script>
 {% endblock page_js %}

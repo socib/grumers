@@ -6,9 +6,14 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns(
+urlpatterns = patterns('')
+
+if settings.DEBUG and settings.MEDIA_ROOT:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
+
+urlpatterns += patterns(
     '',
-    # (r'', include('geosample.apps.')),
     (r'^localeurl/', include('localeurl.urls')),
     (r'^ckeditor/', include('ckeditor.urls')),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -18,8 +23,3 @@ urlpatterns = patterns(
     (r'^logout/?$', 'django.contrib.auth.views.logout', {'next_page': '/login'}),
     (r'^', include('grumers.apps.web.urls')),
 )
-
-if settings.DEBUG and settings.MEDIA_ROOT:
-    urlpatterns += static(
-        settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT)
