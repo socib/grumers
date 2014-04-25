@@ -145,5 +145,9 @@ class JellyfishObservationFilterForm(forms.Form):
             self.fields['station'].queryset = qs.filter(observation_route=route)
             self.fields['route'].widget.attrs['readonly'] = True
 
+        if not user.is_superuser:
+            self.fields['route'].queryset = models.ObservationRoute.objects.filter(
+                groups__in=user.groups.all())
+
         for key in self.fields:
             self.fields[key].label = self.fields[key].label.capitalize()

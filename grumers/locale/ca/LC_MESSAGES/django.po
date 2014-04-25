@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-04-25 13:16+0200\n"
-"PO-Revision-Date: 2014-04-25 13:38+0100\n"
+"PO-Revision-Date: 2014-04-25 14:10+0100\n"
 "Last-Translator: Biel Frontera <bfrontera@socib.es>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -90,7 +90,7 @@ msgstr "punt d'observació"
 
 #: apps/data/forms.py:119
 msgid "Station: all"
-msgstr "Punts: totes"
+msgstr "Punts: tots"
 
 #: apps/data/forms.py:122
 #: apps/data/models.py:174
