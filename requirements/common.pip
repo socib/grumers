@@ -21,3 +21,4 @@ django-geojson
 django-localeurl
 django-modeltranslation
 sorl-thumbnail
+fastkml

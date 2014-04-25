@@ -9,6 +9,9 @@
 
 {% block title %}
 {% trans "Update Observation" %}
+{% if route %}
+  <span class="route">{{ route.name }}</span>
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -17,10 +20,11 @@
     {% crispy form %}
   </div>
   <div class="col-sm-5">
+    <h3 class="thin-title">{% trans "Map" %}</h3>
     <div id="map-route" style="width:100%; height:300px;">
     </div>
     {% if object.picture %}
-        <h2>{% trans "Picture" %}</h2>
+        <h3>{% trans "Picture" %}</h3>
         {% thumbnail object.picture "450" as im %}
             <img src="{{ im.url }}">
         {% endthumbnail %}
@@ -40,7 +44,7 @@
         };
         var lon = 3;
         var lat = 39.4;
-        var zoom = 8;
+        var zoom = 10;
         var map = new OpenLayers.Map('map-route', map_options);
         var osmLayer =  new OpenLayers.Layer.OSM();
         var stationDefaultStyle = new OpenLayers.Style({
@@ -127,10 +131,6 @@
         }
 
         $.getJSON('{% url 'data_species_json' %}', select2JellyfishSpecie);
-
-id: ""
-locked: false
-text: "Cap"
 
         function jellyfishSearch(specieId) {
             if (!specieId)

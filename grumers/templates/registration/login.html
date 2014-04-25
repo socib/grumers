@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block navigation %}{% endblock navigation %}
+{% block title %}
+{% trans "Welcome to Jellyfish observations application" %}
+{% endblock %}
 {% block content %}
     <div class="row-fluid">
         <div class="col-md-offset-4 col-md-4 well">
@@ -8,7 +10,7 @@
             {% if form.errors %}
                 <div class="alert alert-danger">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    {% trans 'Your username and password didn''t match. Please try again.' %}
+                    {% trans 'Your username and password did not match. Please try again.' %}
                 </div>
             {% endif %}
             <form class="form-horizontal form-login" role="form" method="post" action="{% url 'django.contrib.auth.views.login' %}" >
@@ -29,7 +31,7 @@
             {% if next %}
                 <input type="hidden" name="next" value="{{ next }}" />
             {% else %}
-                <input type="hidden" name="next" value="{% url 'web_home' %}" />
+                <input type="hidden" name="next" value="{% url 'data_route_list' %}" />
             {% endif %}
 
               <div class="form-group">

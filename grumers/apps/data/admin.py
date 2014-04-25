@@ -4,6 +4,7 @@ from django.db.models import TextField
 from ckeditor.widgets import CKEditorWidget
 
 import models
+import widgets
 
 
 class AuditModelAdmin(admin.ModelAdmin):
@@ -20,16 +21,22 @@ class JellyfishSpeciesAdmin(AuditModelAdmin):
 
 
 class ObservationRouteAdmin(AuditModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'group_list',)
+    filter_horizontal = ('groups',)
 
 
 class ObservationStationAdmin(AuditModelAdmin):
-    list_display = ('name', 'observation_route', 'order')
+    list_display = ('observation_route', 'name', 'position_coordinates', 'order')
     list_filter = ['observation_route']
-    openlayers_url = 'js/open_layers/OpenLayers.js'
-    default_lon = 2.58
-    default_lat = 39.50
-    default_zoom = 9
+    # openlayers_url = 'js/open_layers/OpenLayers.js'
+
+    def get_form(self, request, obj=None, **kwargs):
+        # Change position widget
+        form = super(ObservationStationAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['position'].widget = widgets.GrumersOSMWidget(
+            attrs={'map_width': 800,
+                   'map_height': 500})
+        return form
 
 
 class JellyfishObservationAdmin(AuditModelAdmin):

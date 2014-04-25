@@ -1,5 +1,6 @@
 import django_tables2 as tables
-from django_tables2.utils import A
+from django.template import Context
+from django.utils.translation import ugettext_lazy as _
 import models
 
 
@@ -21,10 +22,13 @@ class JellyfishObservationTable(tables.Table):
     def __init__(self, *args, **kwargs):
         self.route = kwargs.pop('route', None)
         super(JellyfishObservationTable, self).__init__(*args, **kwargs)
-        # self.base_columns['date_observed'].verbose_name = 'Test - proves'
         if self.route:
-            self.base_columns['date_observed'].viewname = 'data_route_observation_update'
-            self.base_columns['date_observed'].args = [int(self.route), A('pk')]
+            self.context = Context({'route': self.route})
+            self.base_columns['date_observed'].template_code = """
+            <a href="{% url 'data_route_observation_update' route.pk record.pk %}">
+            {{ record.date_observed|date:'d/m/Y H:i'}}
+            </a>
+            """
 
     class Meta:
         model = models.JellyfishObservation
@@ -53,7 +57,8 @@ class ObservationRouteTable(tables.Table):
             href="{% url 'data_route_observation_create' record.pk %}">
             <i class="glyphicon glyphicon-plus"></i>
             {% trans 'Add' %} {% trans 'observation' %}
-            </a>""")
+            </a>""",
+        verbose_name=_('create observation'))
 
     class Meta:
         model = models.ObservationRoute

@@ -6,10 +6,10 @@
 {% block title_head %}{{ block.super }}: {% trans "Observation List" %}{% endblock %}
 
 {% block title %}
-{% if route %}
-  {{ route.name }} -
-{% endif %}
 {% trans "Observation List" %}
+{% if route %}
+  <span class="route">{{ route.name }}</span>
+{% endif %}
 {% endblock %}
 
 {% block content %}

@@ -16,6 +16,7 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
+            {% if pages %}
             {% recursetree pages %}
               {% if not node.registration_required or user.is_authenticated %}
               <li class="{% if not node.is_leaf_node %}dropdown{% endif %}  {% if request.path == node.url|chlocale:LANGUAGE_CODE  %}active{% endif %}">
@@ -29,11 +30,25 @@
               </li>
               {% endif %}
             {% endrecursetree %}
+            {% endif %}
+            {% if user.is_staff %}
+              <li class="dropdown">
+                  <a data-toggle="dropdown" class="dropdown-toggle" href="{% url 'admin:index' %}">{% trans 'Administration' %}<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                      <li><a href="{% url 'admin:data_jellyfishspecie_changelist' %}">{% trans 'jellyfish species' %}</a></li>
+                      <li><a href="{% url 'admin:data_observationroute_changelist' %}">{% trans 'observation routes' %}</a></li>
+                      <li><a href="{% url 'admin:data_observationstation_changelist' %}">{% trans 'observation stations' %}</a></li>
+                      <li class="divider"></li>
+                      <li><a href="{% url 'admin:auth_user_changelist' %}">{% trans 'users' %}</a></li>
+                      <li><a href="{% url 'admin:auth_group_changelist' %}">{% trans 'groups' %}</a></li>
+                  </ul>
+              </li>
+            {% endif %}
           </ul>
             <ul class="nav navbar-nav pull-right">
             {% if user.is_authenticated %}
             <li class="dropdown">
-                <a data-toggle="dropdown" class="dropdown-toggle" href="#"><img class="gravatar" src="{{ request.user.gravatar }}"/> &nbsp;{{ request.user.username }} <b class="caret"></b></a>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">{{ request.user.username }} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'django.contrib.auth.views.logout' %}">{% trans 'Logout' %}</a></li>
                 </ul>

@@ -17,8 +17,8 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
         fields = [
             'date_observed',
             'observation_station',
-            'jellyfish_specie',
             'quantity',
+            'jellyfish_specie',
             'picture',
             'remarks',
         ]
@@ -142,7 +142,8 @@ class JellyfishObservationFilterForm(forms.Form):
                 id__in=[user.id])
         if route:
             qs = self.fields['station'].queryset
-            self.fields['station'].queryset = qs.filter(observation_route_id=route)
+            self.fields['station'].queryset = qs.filter(observation_route=route)
+            self.fields['route'].widget.attrs['readonly'] = True
 
         for key in self.fields:
             self.fields[key].label = self.fields[key].label.capitalize()

@@ -6,4 +6,7 @@
 
 {% block title %}
 {% trans "Create Observation" %}
+{% if route %}
+  <span class="route">{{ route.name }}</span>
+{% endif %}
 {% endblock %}

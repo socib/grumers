@@ -27,20 +27,29 @@ class JellyfishObservationMixin(BasePageView):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         self.station = request.GET.get('station', None)
-        self.route = kwargs.get('pk_route', None)
+        pk_route = kwargs.get('pk_route', None)
+        if pk_route:
+            self.route = models.ObservationRoute.objects.get(pk=pk_route)
+            # Check if user is member of a group in route groups (if it has any)
+            if not request.user.is_superuser and self.route.groups and\
+               not (request.user.groups.all() & self.route.groups.all()):
+                raise PermissionDenied()
+        else:
+            self.route = None
+
         self.date = request.GET.get('date', None)
         if self.date:
             self.date = datetime.strptime(self.date, '%Y%m%d%H%M')
-            print 'date:', self.date
         self.next_station = None
+        self.station_list = models.ObservationStation.objects.all()
+        if self.route:
+            self.station_list = self.station_list.filter(observation_route=self.route)
         return super(JellyfishObservationMixin, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(JellyfishObservationMixin, self).get_context_data(**kwargs)
-        station_list = models.ObservationStation.objects.all()
-        if self.route:
-            station_list = station_list.filter(observation_route__id=self.route)
-        context['station_list'] = station_list
+        context['station_list'] = self.station_list
+        context['route'] = self.route
         return context
 
     def post(self, request, *args, **kwargs):
@@ -52,7 +61,8 @@ class JellyfishObservationMixin(BasePageView):
     def get_form_kwargs(self):
         kwargs = super(JellyfishObservationMixin, self).get_form_kwargs()
         kwargs['station'] = self.station
-        kwargs['route'] = self.route
+        if self.route:
+            kwargs['route'] = self.route.pk
         return kwargs
 
     def get_success_url(self):
@@ -60,7 +70,7 @@ class JellyfishObservationMixin(BasePageView):
             if self.route:
                 return "{url}?station={next_station}&date={date:%Y%m%d%H%M}".format(
                     url=reverse('data_route_observation_create',
-                                args=[self.route]),
+                                args=[self.route.pk]),
                     next_station=self.next_station,
                     date=self.object.date_observed)
             return "{url}?station={next_station}&date={date:%Y%m%d%H%M}".format(
@@ -68,7 +78,7 @@ class JellyfishObservationMixin(BasePageView):
                 next_station=self.next_station,
                 date=self.object.date_observed)
         if self.route:
-            return reverse('data_route_observation_list', args=[self.route])
+            return reverse('data_route_observation_list', args=[self.route.pk])
         return reverse('data_observation_list')
 
 
@@ -105,6 +115,8 @@ class JellyfishObservationCreate(JellyfishObservationMixin, CreateView):
             initial['date_observed'] = self.date
         else:
             initial['date_observed'] = datetime.now()
+        if len(self.station_list) == 1:
+            initial['observation_station'] = self.station_list[0]
         return initial
 
 
@@ -158,9 +170,17 @@ class JellyfishObservationList(BasePageView, SingleTableView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.has_perm('data.can_list_jellyfishobservation'):
+        if not request.user.has_perm('data.can_list_jellyfishobservations'):
             raise PermissionDenied()
-        self.route = kwargs.get('pk_route', None)
+        pk_route = kwargs.get('pk_route', None)
+        if pk_route:
+            self.route = models.ObservationRoute.objects.get(pk=pk_route)
+            # Check if user is member of a group in route groups (if it has any)
+            if not request.user.is_superuser and self.route.groups and\
+               not (request.user.groups.all() & self.route.groups.all()):
+                raise PermissionDenied()
+        else:
+            self.route = None
         self.form = forms.JellyfishObservationFilterForm(self.request.GET,
                                                          user=request.user,
                                                          route=self.route)
@@ -168,7 +188,7 @@ class JellyfishObservationList(BasePageView, SingleTableView):
 
     def get_table(self, **kwargs):
         if self.route:
-            kwargs['route'] = self.route
+            kwargs['route'] = self.route.pk
         return super(JellyfishObservationList, self).get_table(**kwargs)
 
     def get_table_data(self):
@@ -180,7 +200,7 @@ class JellyfishObservationList(BasePageView, SingleTableView):
             data = data.filter(created_by=user)
         if self.route:
             data = data.filter(
-                observation_station__observation_route__id=self.route)
+                observation_station__observation_route=self.route)
 
         if self.form.is_valid():
             if self.form.cleaned_data['jellyfish_specie']:
@@ -207,8 +227,7 @@ class JellyfishObservationList(BasePageView, SingleTableView):
     def get_context_data(self, **kwargs):
         context = super(JellyfishObservationList, self).get_context_data(**kwargs)
         context['form'] = self.form
-        if self.route:
-            context['route'] = models.ObservationRoute.objects.get(pk=self.route)
+        context['route'] = self.route
         return context
 
 
@@ -224,6 +243,12 @@ class ObservationRouteList(BasePageView, SingleTableView):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super(ObservationRouteList, self).dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        if not self.request.user.is_superuser:
+            return models.ObservationRoute.objects.filter(
+                groups__in=self.request.user.groups.all())
+        return models.ObservationRoute.objects.all()
 
 
 class JSONJellyfishSpecieList(BaseListView):

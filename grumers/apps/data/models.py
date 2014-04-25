@@ -1,6 +1,6 @@
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.utils.html import strip_tags
 from sorl.thumbnail import get_thumbnail
 import os
@@ -16,9 +16,10 @@ def generate_image_path(path):
 
 class JellyfishSpecie(models.Model):
     name = models.CharField(_('scientific name'), max_length=100)
-    common_name = models.CharField(_('common name'), max_length=100)
+    common_name = models.CharField(_('common name'), max_length=100,
+                                   null=True, blank=True)
     slug = models.SlugField(_('slug'), max_length=100, unique=True)
-    description = models.TextField(_('description'))
+    description = models.TextField(_('description'), null=True, blank=True)
     picture = models.ImageField(_('picture'),
                                 upload_to=generate_image_path('jellyfish_species/'),
                                 default='jellyfish_species/no-img.jpg')
@@ -72,7 +73,10 @@ class JellyfishSpecie(models.Model):
 
 class ObservationRoute(models.Model):
     name = models.CharField(_('name'), max_length=100)
-    description = models.TextField(_('description'))
+    code = models.CharField(_('code'), max_length=10, null=True, blank=True,
+                            db_index=True)
+    description = models.TextField(_('description'), null=True, blank=True)
+    groups = models.ManyToManyField(Group, verbose_name=_('user groups allowed'))
     # Audit
     created_on = models.DateTimeField(_('date added'), auto_now_add=True)
     created_by = models.ForeignKey(User, blank=True, null=True,
@@ -86,9 +90,14 @@ class ObservationRoute(models.Model):
     class Meta:
         verbose_name = _('observation route')
         verbose_name_plural = _('observation routes')
+        ordering = ['name']
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def group_list(self):
+        return ', '.join([group.name for group in self.groups.all()])
 
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -124,6 +133,10 @@ class ObservationStation(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def position_coordinates(self):
+        return ", ".join([str(self.position.x), str(self.position.y)])
+
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         self.updated_by = user
@@ -149,7 +162,7 @@ class JellyfishObservation(models.Model):
         (110, _('100 or more')),
     )
 
-    date_observed = models.DateTimeField(_('date observed'))
+    date_observed = models.DateTimeField(_('observation date and time'))
     observation_station = models.ForeignKey(ObservationStation, on_delete=models.PROTECT,
                                             verbose_name=_('observation station'))
     jellyfish_specie = models.ForeignKey(JellyfishSpecie, on_delete=models.PROTECT,
