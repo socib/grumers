@@ -23,6 +23,7 @@ class JellyfishSpecie(models.Model):
     picture = models.ImageField(_('picture'),
                                 upload_to=generate_image_path('jellyfish_species/'),
                                 default='jellyfish_species/no-img.jpg')
+    order = models.IntegerField(_('display order'))
     # Audit
     created_on = models.DateTimeField(_('date added'), auto_now_add=True)
     created_by = models.ForeignKey(User, blank=True, null=True,
@@ -36,6 +37,7 @@ class JellyfishSpecie(models.Model):
     class Meta:
         verbose_name = _('jellyfish specie')
         verbose_name_plural = _('jellyfish species')
+        ordering = ['order', 'name']
 
     def __unicode__(self):
         return self.name
