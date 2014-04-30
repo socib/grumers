@@ -131,6 +131,12 @@ class JellyfishObservationFilterForm(forms.Form):
             value=_('Filter'),
             type='submit')
         self.helper.add_input(filter_button)
+        export_button = Submit(
+            'export',
+            css_class='btn btn-info',
+            value=_('Export'),
+            type='submit')
+        self.helper.add_input(export_button)
 
         user = kwargs.pop('user')
         route = kwargs.pop('route')

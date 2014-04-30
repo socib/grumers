@@ -42,6 +42,20 @@ class JellyfishObservationTable(tables.Table):
             'source',
         )
 
+    @property
+    def verbose_name(self):
+        if getattr(self, 'display_name', None):
+            return self.display_name
+        return self.Meta.model._meta.verbose_name_plural.title()
+
+
+class JellyfishObservationExportTable(JellyfishObservationTable):
+    date_observed = tables.Column()
+
+    def __init__(self, *args, **kwargs):
+        self.route = kwargs.pop('route', None)
+        super(JellyfishObservationExportTable, self).__init__(*args, **kwargs)
+
 
 class ObservationRouteTable(tables.Table):
     name = tables.TemplateColumn(

@@ -12,6 +12,7 @@ from django.utils import simplejson as json
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from datetime import datetime
+from grumers.utils import exporter
 import models
 import forms
 import tables
@@ -167,6 +168,7 @@ class JellyfishObservationList(BasePageView, SingleTableView):
     table_class = tables.JellyfishObservationTable
     model = models.JellyfishObservation
     table_pagination = {"per_page": 50}
+    export_format = None
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -184,6 +186,12 @@ class JellyfishObservationList(BasePageView, SingleTableView):
         self.form = forms.JellyfishObservationFilterForm(self.request.GET,
                                                          user=request.user,
                                                          route=self.route)
+        # Get export_type
+        if "export" in request.POST or "export" in request.GET:
+            self.export_format = 'xlsx'
+            self.table_class = tables.JellyfishObservationExportTable
+            print "A post tenim export"
+
         return super(JellyfishObservationList, self).dispatch(request, *args, **kwargs)
 
     def get_table(self, **kwargs):
@@ -229,6 +237,17 @@ class JellyfishObservationList(BasePageView, SingleTableView):
         context['form'] = self.form
         context['route'] = self.route
         return context
+
+    def export_data(self):
+        table = self.get_table()
+        print "cridam a export_table"
+        return exporter.export_table(table, format=self.export_format)
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.export_format is not None:
+            return self.export_data()
+        return super(JellyfishObservationList, self).render_to_response(context,
+                                                                        **response_kwargs)
 
 
 class ObservationRouteList(BasePageView, SingleTableView):

@@ -22,3 +22,5 @@ django-localeurl
 django-modeltranslation
 sorl-thumbnail
 fastkml
+# ODS and XLS export
+openpyxl
