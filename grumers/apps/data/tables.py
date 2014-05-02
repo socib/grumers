@@ -1,6 +1,8 @@
 import django_tables2 as tables
 from django.template import Context
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.gis.geos import GEOSGeometry
+from django.utils import simplejson
 import models
 
 
@@ -55,6 +57,35 @@ class JellyfishObservationExportTable(JellyfishObservationTable):
     def __init__(self, *args, **kwargs):
         self.route = kwargs.pop('route', None)
         super(JellyfishObservationExportTable, self).__init__(*args, **kwargs)
+
+
+class JellyfishObservationAggregatedTable(tables.Table):
+    x = tables.Column(empty_values=())
+    y = tables.Column(empty_values=())
+    sum_quantity = tables.Column()
+
+    def render_x(self, record):
+        return "{:.6f}".format(GEOSGeometry(record['observation_station__position']).x)
+
+    def render_y(self, record):
+        return "{:.6f}".format(GEOSGeometry(record['observation_station__position']).y)
+
+    @property
+    def json(self):
+        data = []
+        for record in self.rows:
+            data.append({
+                'lat': float(record['y']),
+                'lng': float(record['x']),
+                'count': record['sum_quantity']})
+        return simplejson.dumps(data)
+
+    def __init__(self, *args, **kwargs):
+        self.route = kwargs.pop('route', None)
+        super(JellyfishObservationAggregatedTable, self).__init__(*args, **kwargs)
+
+    class Meta:
+        attrs = {"class": "table table-striped"}
 
 
 class ObservationRouteTable(tables.Table):

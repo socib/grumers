@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import simplejson as json
 from django.contrib import messages
+from django.db.models import Sum
 from django.core.exceptions import PermissionDenied
 from datetime import datetime
 from grumers.utils import exporter
@@ -190,7 +191,6 @@ class JellyfishObservationList(BasePageView, SingleTableView):
         if "export" in request.POST or "export" in request.GET:
             self.export_format = 'xlsx'
             self.table_class = tables.JellyfishObservationExportTable
-            print "A post tenim export"
 
         return super(JellyfishObservationList, self).dispatch(request, *args, **kwargs)
 
@@ -216,7 +216,8 @@ class JellyfishObservationList(BasePageView, SingleTableView):
                     jellyfish_specie=self.form.cleaned_data['jellyfish_specie'])
             if self.form.cleaned_data['route']:
                 data = data.filter(
-                    observation_station__observation_route=self.form.cleaned_data['route'])
+                    observation_station__observation_route=
+                    self.form.cleaned_data['route'])
             if self.form.cleaned_data['station']:
                 data = data.filter(
                     observation_station=self.form.cleaned_data['station'])
@@ -240,7 +241,6 @@ class JellyfishObservationList(BasePageView, SingleTableView):
 
     def export_data(self):
         table = self.get_table()
-        print "cridam a export_table"
         return exporter.export_table(table, format=self.export_format)
 
     def render_to_response(self, context, **response_kwargs):
@@ -248,6 +248,22 @@ class JellyfishObservationList(BasePageView, SingleTableView):
             return self.export_data()
         return super(JellyfishObservationList, self).render_to_response(context,
                                                                         **response_kwargs)
+
+
+class JellyfishObservationHeatmap(JellyfishObservationList):
+    """Show observations in a heatmap, with filter.
+    """
+    template_name = 'data/jellyfishobservation_heatmap.html'
+    table_class = tables.JellyfishObservationAggregatedTable
+
+    def get_table_data(self):
+        data = super(JellyfishObservationHeatmap, self).get_table_data()
+        if self.export_format is not None:
+            return data
+        # convert data to group by station
+        data = data.values('observation_station__position').annotate(
+            sum_quantity=Sum('quantity')).order_by('-sum_quantity')
+        return data
 
 
 class ObservationRouteList(BasePageView, SingleTableView):
