@@ -63,6 +63,8 @@ class JellyfishObservationAggregatedTable(tables.Table):
     x = tables.Column(empty_values=())
     y = tables.Column(empty_values=())
     sum_quantity = tables.Column()
+    station_name = tables.Column()
+    route_name = tables.Column()
 
     def render_x(self, record):
         return "{:.6f}".format(GEOSGeometry(record['observation_station__position']).x)
@@ -77,6 +79,8 @@ class JellyfishObservationAggregatedTable(tables.Table):
             data.append({
                 'lat': float(record['y']),
                 'lng': float(record['x']),
+                'station': record['station_name'],
+                'route': record['route_name'],
                 'count': record['sum_quantity']})
         return simplejson.dumps(data)
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-02 17:57+0200\n"
-"PO-Revision-Date: 2014-05-02 18:03+0100\n"
+"POT-Creation-Date: 2014-05-06 11:59+0200\n"
+"PO-Revision-Date: 2014-05-06 12:00+0100\n"
 "Last-Translator: Biel Frontera <bfrontera@socib.es>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -249,7 +249,7 @@ msgstr "observación de medusas"
 msgid "jellyfish observations"
 msgstr "observaciones de medusas"
 
-#: apps/data/tables.py:106
+#: apps/data/tables.py:110
 msgid "create observation"
 msgstr "Crea observación"
 
@@ -322,11 +322,18 @@ msgid "Observation Heatmap"
 msgstr "Mapa de calor"
 
 #: templates/data/jellyfishobservation_heatmap.html:20
+#: templates/data/jellyfishobservation_map.html:20
 msgid "Show observation list"
 msgstr "Muesta la lista de observaciones"
 
-#: templates/data/jellyfishobservation_heatmap.html:25
-#: templates/data/jellyfishobservation_list.html:24
+#: templates/data/jellyfishobservation_heatmap.html:21
+#: templates/data/jellyfishobservation_list.html:19
+msgid "Show observation map"
+msgstr "Muestra el mapa"
+
+#: templates/data/jellyfishobservation_heatmap.html:26
+#: templates/data/jellyfishobservation_list.html:25
+#: templates/data/jellyfishobservation_map.html:26
 msgid "No observations found"
 msgstr "No se ha encontrado ninguna observación"
 
@@ -335,19 +342,25 @@ msgstr "No se ha encontrado ninguna observación"
 msgid "Observation List"
 msgstr "Lista de observaciones"
 
-#: templates/data/jellyfishobservation_list.html:19
+#: templates/data/jellyfishobservation_list.html:20
+#: templates/data/jellyfishobservation_map.html:21
 msgid "Show observation heatmap"
 msgstr "Muestra el mapa de calor"
 
-#: templates/data/jellyfishobservation_list.html:27
-#: templates/data/jellyfishobservation_list.html:29
+#: templates/data/jellyfishobservation_list.html:28
+#: templates/data/jellyfishobservation_list.html:30
 msgid "Add"
 msgstr "Nueva"
 
-#: templates/data/jellyfishobservation_list.html:27
-#: templates/data/jellyfishobservation_list.html:29
+#: templates/data/jellyfishobservation_list.html:28
+#: templates/data/jellyfishobservation_list.html:30
 msgid "observation"
 msgstr "observación"
+
+#: templates/data/jellyfishobservation_map.html:7
+#: templates/data/jellyfishobservation_map.html:10
+msgid "Observation Map"
+msgstr "Mapa de las observaciones"
 
 #: templates/data/jellyfishobservation_update.html:8
 #: templates/data/jellyfishobservation_update.html:11

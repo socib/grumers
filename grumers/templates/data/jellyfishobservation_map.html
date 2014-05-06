@@ -1,0 +1,47 @@
+{% extends "data/base.html" %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block title_head %}{{ block.super }}: {% trans "Observation Map" %}{% endblock %}
+
+{% block title %}
+{% trans "Observation Map" %}
+{% if route %}
+  <span class="route">{{ route.name }}</span>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-3">
+    {% crispy form %}
+    <a class="btn btn-info btn-block" style="display:block; margin-top: 20px;" href="{% if route %}{% url 'data_route_observation_list' route.pk %}{% else %}{% url 'data_observation_list' %}{% endif %}"><i class="glyphicon glyphicon-list"></i> {% trans 'Show observation list' %}</a>
+    <a class="btn btn-info btn-block" style="display:block;  margin-top: 20px;" href="{% if route %}{% url 'data_route_observation_heatmap' route.pk %}{% else %}{% url 'data_observation_heatmap' %}{% endif %}"><i class="glyphicon glyphicon-map-marker"></i> {% trans 'Show observation heatmap' %}</a>
+  </div>
+  <div class="col-sm-9">
+    <div id="map" style="width:90%; height:500px;">
+    {% if not table.rows %}
+    <h2>{% trans "No observations found" %}</h2>
+    {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+  <script src="{% static "js/open_layers/OpenLayers.js" %}"></script>
+  <script src="{% static "js/jellyfishobservation_map.js" %}"></script>
+  <script type="text/javascript">
+    $(function() {
+        /* prepare data */
+        var data = {{ table.json|safe }};
+        if (data.length == 0){
+          return;
+        }
+        JellyfishObservationMap.generate('map', data);
+    });
+  </script>
+{% endblock page_js %}
+

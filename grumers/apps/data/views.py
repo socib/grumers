@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import simplejson as json
 from django.contrib import messages
-from django.db.models import Sum
+from django.db.models import Sum, Max
 from django.core.exceptions import PermissionDenied
 from datetime import datetime
 from grumers.utils import exporter
@@ -246,24 +246,32 @@ class JellyfishObservationList(BasePageView, SingleTableView):
     def render_to_response(self, context, **response_kwargs):
         if self.export_format is not None:
             return self.export_data()
-        return super(JellyfishObservationList, self).render_to_response(context,
-                                                                        **response_kwargs)
+        return super(
+            JellyfishObservationList,
+            self).render_to_response(context, **response_kwargs)
 
 
-class JellyfishObservationHeatmap(JellyfishObservationList):
-    """Show observations in a heatmap, with filter.
+class JellyfishObservationMap(JellyfishObservationList):
+    """Show observations in a map, with filter.
     """
-    template_name = 'data/jellyfishobservation_heatmap.html'
+    template_name = 'data/jellyfishobservation_map.html'
     table_class = tables.JellyfishObservationAggregatedTable
 
     def get_table_data(self):
-        data = super(JellyfishObservationHeatmap, self).get_table_data()
+        data = super(JellyfishObservationMap, self).get_table_data()
         if self.export_format is not None:
             return data
-        # convert data to group by station
         data = data.values('observation_station__position').annotate(
-            sum_quantity=Sum('quantity')).order_by('-sum_quantity')
+            sum_quantity=Sum('quantity'),
+            route_name=Max('observation_station__observation_route__name'),
+            station_name=Max('observation_station__name')).order_by('-sum_quantity')
         return data
+
+
+class JellyfishObservationHeatmap(JellyfishObservationMap):
+    """Show observations in a heatmap, with filter.
+    """
+    template_name = 'data/jellyfishobservation_heatmap.html'
 
 
 class ObservationRouteList(BasePageView, SingleTableView):

@@ -18,12 +18,14 @@
   <div class="col-sm-3">
     {% crispy form %}
     <a class="btn btn-info btn-block" style="margin-top: 20px;" href="{% if route %}{% url 'data_route_observation_list' route.pk %}{% else %}{% url 'data_observation_list' %}{% endif %}"><i class="glyphicon glyphicon-list"></i> {% trans 'Show observation list' %}</a>
+    <a class="btn btn-info btn-block" style="display:block;  margin-top: 20px;" href="{% if route %}{% url 'data_route_observation_map' route.pk %}{% else %}{% url 'data_observation_map' %}{% endif %}"><i class="glyphicon glyphicon-map-marker"></i> {% trans 'Show observation map' %}</a>
   </div>
   <div class="col-sm-9">
     <div id="map" style="width:90%; height:500px;">
     {% if not table.rows %}
     <h2>{% trans "No observations found" %}</h2>
     {% endif %}
+    </div>
   </div>
 </div>
 {% endblock %}
