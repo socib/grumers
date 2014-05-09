@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding:utf-8 -*-
 
 """Base settings shared by all environments"""
 # Import global settings to make it easier to extend settings.
@@ -219,3 +219,10 @@ MODELTRANSLATION_FALLBACK_LANGUAGES = {
     'ca': ('es',),
 }
 GEOJSON_DEFAULT_SRID = 4326
+
+#==============================================================================
+# This project settings
+#==============================================================================
+GRUMERS_GROUP_BEACH_GENERAL_ADMIN = 'Administració platges'
+GRUMERS_GROUP_BEACH_MUN_ADMIN_PREFIX = 'Administració platges '
+GRUMERS_GROUP_BEACH_ADMIN_PREFIX = 'Responsable '

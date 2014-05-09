@@ -24,6 +24,13 @@ class ObservationRouteAdmin(AuditModelAdmin):
     list_display = ('name', 'group_list',)
     filter_horizontal = ('groups',)
 
+    def save_model(self, request, obj, form, change):
+        if form.cleaned_data['route_type'] == 'B' and not form.cleaned_data['groups']:
+            route = form.save(commit=False)
+            form.cleaned_data['groups'] = models.get_default_beach_groups(route)
+
+        super(ObservationRouteAdmin, self).save_model(request, obj, form, change)
+
 
 class ObservationStationAdmin(AuditModelAdmin):
     list_display = ('observation_route', 'name', 'position_coordinates', 'order')

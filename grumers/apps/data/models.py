@@ -1,7 +1,10 @@
+# -*- coding:utf-8 -*-
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User, Group
 from django.utils.html import strip_tags
+from django.conf import settings
+from django.db.models.signals import post_save
 from sorl.thumbnail import get_thumbnail
 import os
 
@@ -72,13 +75,35 @@ class JellyfishSpecie(models.Model):
 
         return obj
 
+ISLAND_CHOICES = (
+    ('Mallorca', _('Mallorca')),
+    ('Menorca', _('Menorca')),
+    ('Eivissa', _('Eivissa')),
+    ('Formentera', _('Formentera')),
+)
+
 
 class ObservationRoute(models.Model):
+    ROUTE_TYPE_CHOICES = (
+        ('R', _('Marine reserve')),
+        ('C', _('Cleaning route')),
+        ('B', _('Beach watching')),
+    )
+
     name = models.CharField(_('name'), max_length=100)
     code = models.CharField(_('code'), max_length=10, null=True, blank=True,
                             db_index=True)
     description = models.TextField(_('description'), null=True, blank=True)
-    groups = models.ManyToManyField(Group, verbose_name=_('user groups allowed'))
+    route_type = models.CharField(_('type'), max_length=1,
+                                  choices=ROUTE_TYPE_CHOICES,
+                                  default='C')
+    island = models.CharField(_('island'), max_length=15,
+                              choices=ISLAND_CHOICES,
+                              blank=True, null=True)
+    municipality = models.CharField(_('municipality'), max_length=50,
+                                    null=True, blank=True)
+    groups = models.ManyToManyField(Group, verbose_name=_('user groups allowed'),
+                                    blank=True, null=True)
     # Audit
     created_on = models.DateTimeField(_('date added'), auto_now_add=True)
     created_by = models.ForeignKey(User, blank=True, null=True,
@@ -110,11 +135,21 @@ class ObservationRoute(models.Model):
 
 
 class ObservationStation(models.Model):
+    STATION_TYPE_CHOICES = (
+        ('S', _('High sea')),
+        ('O', _('Offshore - 200 m')),
+        ('N', _('Nearshore - 100 m')),
+        ('B', _('Beach shore')),
+    )
+
     name = models.CharField(_('name'), max_length=100)
     observation_route = models.ForeignKey(ObservationRoute, on_delete=models.PROTECT,
                                           verbose_name=_('observation route'))
     order = models.IntegerField(_('order in route'))
     position = models.PointField(srid=4326, verbose_name=_('position'))
+    station_type = models.CharField(_('type'), max_length=1,
+                                    choices=STATION_TYPE_CHOICES,
+                                    default='S')
     # Audit
     created_on = models.DateTimeField(_('date added'), auto_now_add=True)
     created_by = models.ForeignKey(User, blank=True, null=True,
@@ -138,6 +173,10 @@ class ObservationStation(models.Model):
     @property
     def position_coordinates(self):
         return ", ".join([str(self.position.x), str(self.position.y)])
+
+    @property
+    def longname(self):
+        return " - ".join([self.observation_route.name, self.name])
 
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -178,6 +217,12 @@ class JellyfishObservation(models.Model):
                               choices=SOURCE_CHOICES,
                               default=WEBFORM, blank=False)
     remarks = models.TextField(_('remarks'), blank=True, null=True)
+    sting_incidents = models.IntegerField(
+        _('total sting incidents'),
+        default=0, blank=True)
+    total_incidents = models.IntegerField(
+        _('total incidents'),
+        default=0, blank=True)
     # Audit
     created_on = models.DateTimeField(_('date added'), auto_now_add=True)
     created_by = models.ForeignKey(User, blank=True, null=True,
@@ -224,3 +269,43 @@ class JellyfishObservation(models.Model):
             specie=specie,
             date=self.date_observed,
             qty=self.quantity)
+
+
+def assign_default_beach_groups(sender, instance, **kwargs):
+    if instance.route_type != 'B' or instance.groups.count() > 0:
+        return
+    groups = get_default_beach_groups(instance)
+    instance.groups.add(*groups)
+
+
+def get_default_beach_groups(route):
+    groups = []
+    groups.append(get_group(settings.GRUMERS_GROUP_BEACH_GENERAL_ADMIN))
+    if route.municipality:
+        group_name = settings.GRUMERS_GROUP_BEACH_MUN_ADMIN_PREFIX.decode('utf-8') +\
+            route.municipality.decode('utf-8')
+        groups.append(get_group(group_name))
+    try:
+        group_name = settings.GRUMERS_GROUP_BEACH_ADMIN_PREFIX.decode('utf-8') +\
+            route.name
+    except:
+        group_name = settings.GRUMERS_GROUP_BEACH_ADMIN_PREFIX.decode('utf-8') +\
+            route.name.decode('utf-8')
+
+    groups.append(get_group(group_name))
+    return groups
+
+
+def get_group(group_name):
+    try:
+        group = Group.objects.get(name=group_name)
+    except Group.DoesNotExist:
+        group = Group()
+        group.name = group_name
+        group.save()
+    return group
+
+post_save.connect(
+    assign_default_beach_groups,
+    sender=ObservationRoute,
+    dispatch_uid="assign_beach_groups")

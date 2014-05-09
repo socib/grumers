@@ -64,7 +64,7 @@ class JellyfishObservationMixin(BasePageView):
         kwargs = super(JellyfishObservationMixin, self).get_form_kwargs()
         kwargs['station'] = self.station
         if self.route:
-            kwargs['route'] = self.route.pk
+            kwargs['route'] = self.route
         return kwargs
 
     def get_success_url(self):

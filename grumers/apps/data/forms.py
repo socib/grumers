@@ -3,8 +3,10 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit, Fieldset, ButtonHolder
+from crispy_forms.bootstrap import StrictButton
 from bootstrap3_datetime.widgets import DateTimePicker
+from grumers.utils.crispy import ExtendedLayout
 
 import models
 
@@ -21,6 +23,8 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
             'jellyfish_specie',
             'picture',
             'remarks',
+            'sting_incidents',
+            'total_incidents',
         ]
 
     def clean(self):
@@ -38,6 +42,14 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
             self._errors["jellyfish_specie"] = self.error_class([msg])
             del cleaned_data["quantity"]
             del cleaned_data["jellyfish_specie"]
+
+        if ['sting_incidents', 'total_incidents'] in cleaned_data:
+            if cleaned_data['sting_incidents'] > cleaned_data['total_incidents']:
+                msg = _('Sting incidents can not be greater than total incidents')
+                self._errors["sting_incidents"] = self.error_class([msg])
+                self._errors["jellyfish_specie"] = self.error_class([msg])
+                del cleaned_data["total_incidents"]
+                del cleaned_data["total_incidents"]
         return cleaned_data
 
     def __init__(self, *args, **kwargs):
@@ -45,27 +57,56 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-sm-3'
         self.helper.field_class = 'col-sm-5'
-        submit_button = Submit(
+        submit_button = StrictButton(
+            '<span class="glyphicon glyphicon-save"></span> ' +
+            _('%s observation') % self.button_prefix,
             css_class='btn btn-primary',
             name='observation',
-            value=_('%s observation') % self.button_prefix,
+            value='submit_observation',
             type='submit')
-        next_station_button = Submit(
+        next_station_button = StrictButton(
+            _('%s Create observation and continue with next station') %
+            '<span class="glyphicon glyphicon-arrow-right"></span>',
             css_class='btn btn-primary',
             name='next_station',
-            value=_('Create observation and continue with next station'),
+            value='submit_next_station',
             type='submit')
-        cancel_button = Submit(
+        cancel_button = StrictButton(
+            _('Cancel'),
             css_class='btn',
             name='cancel',
-            value=_('Cancel'),
+            value='cancel',
             type='submit')
 
-        if isinstance(self, JellyfishObservationCreateForm):
-            self.helper.add_input(next_station_button)
+        if not isinstance(self, JellyfishObservationCreateForm):
+            next_station_button = None
 
-        self.helper.add_input(submit_button)
-        self.helper.add_input(cancel_button)
+        self.helper.add_layout(
+            ExtendedLayout(
+                Fieldset(
+                    _('When / Where'),
+                    'date_observed',
+                    'observation_station',
+                ),
+                Fieldset(
+                    _('Jellyfish observation'),
+                    'quantity',
+                    'jellyfish_specie',
+                    'picture',
+                    'remarks',
+                ),
+                Fieldset(
+                    _('Incidents during the day'),
+                    'sting_incidents',
+                    'total_incidents',
+                ),
+                ButtonHolder(
+                    next_station_button,
+                    submit_button,
+                    cancel_button,
+                ),
+            )
+        )
 
         station = kwargs.pop('station', None)
         route = kwargs.pop('route', None)
@@ -81,11 +122,18 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
 
         station_queryset = self.fields['observation_station'].queryset
         if route:
-            station_queryset = station_queryset.filter(observation_route__id=route)
+            station_queryset = station_queryset.filter(observation_route=route)
         self.fields['observation_station'].queryset = station_queryset
 
         self.fields['quantity'].widget = forms.Select(
             choices=models.JellyfishObservation.QUANTITY_CHOICES)
+
+        # Remove incidents if route is not of a beach
+        if not route or route.route_type != 'B':
+            self.fields.pop('sting_incidents')
+            self.fields.pop('total_incidents')
+            self.helper.layout.remove_by_fieldname('sting_incidents')
+            self.helper.layout.remove_by_fieldname('total_incidents')
 
 
 class JellyfishObservationCreateForm(JellyfishObservationUpdateForm):
