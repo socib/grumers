@@ -32,7 +32,7 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
             del cleaned_data["quantity"]
             del cleaned_data["jellyfish_specie"]
 
-        if cleaned_data['quantity'] == 0 and cleaned_data['jellyfish_specie']:
+        elif cleaned_data['quantity'] == 0 and cleaned_data['jellyfish_specie']:
             msg = _('Fill quantity or set specie to none')
             self._errors["quantity"] = self.error_class([msg])
             self._errors["jellyfish_specie"] = self.error_class([msg])
