@@ -98,8 +98,6 @@ class ObservationRouteTable(tables.Table):
             {{ record.name }}
             </a>
         """)
-    description = tables.TemplateColumn(
-        '{{ record.description|truncatewords_html:20|safe }}')
     create_observation = tables.TemplateColumn(
         """{% load i18n %}
            <a class="btn btn-primary"
@@ -114,10 +112,31 @@ class ObservationRouteTable(tables.Table):
         attrs = {"class": "table table-striped"}
         fields = (
             'name',
-            'description',
         )
-        sequence = (
+
+
+class ObservationBeachTable(tables.Table):
+    name = tables.TemplateColumn(
+        """<a href="{% url 'data_route_observation_list' record.pk %}">
+            {{ record.name }}
+            </a>
+        """)
+    island = tables.Column()
+    municipality = tables.Column()
+    create_observation = tables.TemplateColumn(
+        """{% load i18n %}
+           <a class="btn btn-primary"
+            href="{% url 'data_route_observation_create' record.pk %}">
+            <i class="glyphicon glyphicon-plus"></i>
+            {% trans 'Add' %} {% trans 'observation' %}
+            </a>""",
+        verbose_name=_('create observation'))
+
+    class Meta:
+        model = models.ObservationRoute
+        attrs = {"class": "table table-striped"}
+        fields = (
             'name',
-            'description',
-            'create_observation',
+            'island',
+            'municipality',
         )

@@ -1,0 +1,18 @@
+{% extends "data/base.html" %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+
+{% block title_head %}{{ block.super }}: {% trans "Beach List" %}{% endblock %}
+
+{% block title %}
+{% trans "Beach List" %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-9">
+    {% render_table table %}
+  </div>
+</div>
+{% endblock %}

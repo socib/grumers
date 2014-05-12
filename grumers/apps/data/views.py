@@ -162,8 +162,7 @@ class JellyfishObservationDelete(JellyfishObservationMixin, DeleteView):
 
 
 class JellyfishObservationList(BasePageView, SingleTableView):
-    """
-    List observations
+    """List observations
     """
 
     table_class = tables.JellyfishObservationTable
@@ -275,8 +274,7 @@ class JellyfishObservationHeatmap(JellyfishObservationMap):
 
 
 class ObservationRouteList(BasePageView, SingleTableView):
-    """
-    List routes
+    """List routes
     """
 
     table_class = tables.ObservationRouteTable
@@ -288,10 +286,25 @@ class ObservationRouteList(BasePageView, SingleTableView):
         return super(ObservationRouteList, self).dispatch(request, *args, **kwargs)
 
     def get_queryset(self):
+        routes = models.ObservationRoute.objects.exclude(
+            route_type='B')
         if not self.request.user.is_superuser:
-            return models.ObservationRoute.objects.filter(
+            routes = routes.filter(
                 groups__in=self.request.user.groups.all())
-        return models.ObservationRoute.objects.all()
+        return routes
+
+
+class ObservationBeachList(ObservationRouteList):
+    table_class = tables.ObservationBeachTable
+    template_name = 'data/observationbeach_list.html'
+
+    def get_queryset(self):
+        routes = models.ObservationRoute.objects.filter(
+            route_type='B')
+        if not self.request.user.is_superuser:
+            routes = routes.filter(
+                groups__in=self.request.user.groups.all())
+        return routes
 
 
 class JSONJellyfishSpecieList(BaseListView):

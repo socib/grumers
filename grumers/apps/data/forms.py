@@ -7,6 +7,7 @@ from crispy_forms.layout import Submit, Fieldset, ButtonHolder
 from crispy_forms.bootstrap import StrictButton
 from bootstrap3_datetime.widgets import DateTimePicker
 from grumers.utils.crispy import ExtendedLayout
+from grumers.utils.widgets import BeachDateTimePicker
 
 import models
 
@@ -43,7 +44,7 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
             del cleaned_data["quantity"]
             del cleaned_data["jellyfish_specie"]
 
-        if ['sting_incidents', 'total_incidents'] in cleaned_data:
+        if ['sting_incidents', 'total_incidents'] in cleaned_data.keys():
             if cleaned_data['sting_incidents'] > cleaned_data['total_incidents']:
                 msg = _('Sting incidents can not be greater than total incidents')
                 self._errors["sting_incidents"] = self.error_class([msg])
@@ -111,9 +112,6 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
         station = kwargs.pop('station', None)
         route = kwargs.pop('route', None)
         super(JellyfishObservationUpdateForm, self).__init__(*args, **kwargs)
-        self.fields['date_observed'].widget = DateTimePicker(
-            options={"format": "YYYY-MM-DD HH:mm",
-                     "pickSeconds": False})
         self.fields['remarks'].widget.attrs['rows'] = 4
         self.fields['jellyfish_specie'].widget.attrs['class'] = 'ignore-select2'
         self.fields['jellyfish_specie'].empty_label = _('None')
@@ -134,6 +132,13 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
             self.fields.pop('total_incidents')
             self.helper.layout.remove_by_fieldname('sting_incidents')
             self.helper.layout.remove_by_fieldname('total_incidents')
+            self.fields['date_observed'].widget = DateTimePicker(
+                options={"format": "YYYY-MM-DD HH:mm",
+                         "pickSeconds": False})
+        else:
+            self.fields['date_observed'].widget = BeachDateTimePicker(
+                options={"format": "YYYY-MM-DD HH:mm",
+                         "pickSeconds": False})
 
 
 class JellyfishObservationCreateForm(JellyfishObservationUpdateForm):
