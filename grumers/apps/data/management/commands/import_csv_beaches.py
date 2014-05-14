@@ -43,8 +43,14 @@ class Command(NoArgsCommand):
             print "Beach element name is not as expected. Leave order 0"
             station.order = 0
         else:
-            station.order = s[3]
+            station.order = int(s[3])
+
         station.name = beach_el['ELEMENT']
+        station.station_type = beach_el['TIPUS_PUNT']
+        if station.station_type == 'N':
+            station.order = station.order + 10
+        elif station.station_type == 'O':
+            station.order = station.order + 20
         x = float(beach_el['X'].replace(',', '.'))
         y = float(beach_el['Y'].replace(',', '.'))
         pnt = Point(x, y)
