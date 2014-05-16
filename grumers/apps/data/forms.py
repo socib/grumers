@@ -100,6 +100,7 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
                     _('Incidents during the day'),
                     'sting_incidents',
                     'total_incidents',
+                    css_class='incidents'
                 ),
                 ButtonHolder(
                     next_station_button,

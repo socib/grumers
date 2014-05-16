@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.utils.translation import ugettext_lazy as _
+from django.utils import translation
 from bootstrap3_datetime.widgets import DateTimePicker
 
 
@@ -12,9 +13,23 @@ class BeachDateTimePicker(DateTimePicker):
     )
 
     class Media:
-        jsfiles = DateTimePicker.Media.js
-        js = [jsfile for jsfile in jsfiles]
-        js.extend(['js/jellyfish_beach_datetimepicker.js'])
+        class JsFiles(object):
+            def __iter__(self):
+                jsfiles = DateTimePicker.Media.js
+                for jsfile in jsfiles:
+                    yield jsfile
+
+                lang = translation.get_language()
+                if lang:
+                    lang = lang.lower()
+                    if len(lang) > 2:
+                        lang = lang[:2]
+                    if lang not in ['en', 'ca', 'es']:
+                        lang = 'en'
+                    yield 'js/locales/jellyfish_beach_datetimepicker.%s.js' % (lang)
+                yield 'js/jellyfish_beach_datetimepicker.js'
+
+        js = JsFiles()
 
     js_template = '''
         <script>
