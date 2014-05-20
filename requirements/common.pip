@@ -26,3 +26,6 @@ sorl-thumbnail
 fastkml
 # ODS and XLS export
 openpyxl
+# LDAP integration (+ aptitude install libldap2-dev libsasl2-dev )
+python-ldap
+django-auth-ldap

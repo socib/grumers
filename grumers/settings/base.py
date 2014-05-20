@@ -144,6 +144,8 @@ MIDDLEWARE_CLASSES += (
 #==============================================================================
 
 AUTHENTICATION_BACKENDS += (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 #==============================================================================
@@ -223,6 +225,8 @@ GEOJSON_DEFAULT_SRID = 4326
 
 EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 MANDRILL_API_KEY = "Secret"
+
+AUTH_LDAP_SERVER_URI = "ldap://ldap.example.com"
 
 #==============================================================================
 # This project settings
