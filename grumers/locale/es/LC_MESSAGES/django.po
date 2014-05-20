@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-13 10:17+0200\n"
-"PO-Revision-Date: 2014-05-13 10:25+0100\n"
+"POT-Creation-Date: 2014-05-20 14:54+0200\n"
+"PO-Revision-Date: 2014-05-20 15:05+0100\n"
 "Last-Translator: Biel Frontera <bfrontera@socib.es>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -59,25 +59,25 @@ msgstr "Observación de medusas"
 msgid "Incidents during the day"
 msgstr "Incidencias al largo del día"
 
-#: apps/data/forms.py:117
+#: apps/data/forms.py:118
 #: apps/data/models.py:198
 #: apps/data/models.py:248
 msgid "None"
 msgstr "Ninguna"
 
-#: apps/data/forms.py:146
+#: apps/data/forms.py:147
 msgid "Create"
 msgstr "Crea"
 
-#: apps/data/forms.py:156
+#: apps/data/forms.py:157
 msgid "specie"
 msgstr "especie"
 
-#: apps/data/forms.py:157
+#: apps/data/forms.py:158
 msgid "Specie: all"
 msgstr "Especie: todas"
 
-#: apps/data/forms.py:161
+#: apps/data/forms.py:162
 #: apps/data/models.py:34
 #: apps/data/models.py:111
 #: apps/data/models.py:157
@@ -85,44 +85,44 @@ msgstr "Especie: todas"
 msgid "created by"
 msgstr "creado por"
 
-#: apps/data/forms.py:162
+#: apps/data/forms.py:163
 msgid "User: all"
 msgstr "Usuario: todos"
 
-#: apps/data/forms.py:166
+#: apps/data/forms.py:167
 #: apps/data/models.py:118
 #: apps/data/models.py:147
 msgid "observation route"
 msgstr "ruta de observación"
 
-#: apps/data/forms.py:167
+#: apps/data/forms.py:168
 msgid "Route: all"
 msgstr "Ruta: todas"
 
-#: apps/data/forms.py:171
+#: apps/data/forms.py:172
 #: apps/data/models.py:166
 #: apps/data/models.py:208
 msgid "observation station"
 msgstr "punto de observación"
 
-#: apps/data/forms.py:172
+#: apps/data/forms.py:173
 msgid "Station: all"
 msgstr "Puntos: todos"
 
-#: apps/data/forms.py:175
+#: apps/data/forms.py:176
 #: apps/data/models.py:216
 msgid "source"
 msgstr "fuente"
 
-#: apps/data/forms.py:176
+#: apps/data/forms.py:177
 msgid "from date"
 msgstr "desde fecha"
 
-#: apps/data/forms.py:184
+#: apps/data/forms.py:185
 msgid "Filter"
 msgstr "Filtra"
 
-#: apps/data/forms.py:190
+#: apps/data/forms.py:191
 msgid "Export"
 msgstr "Exporta"
 
@@ -234,6 +234,7 @@ msgid "municipality"
 msgstr "municipio"
 
 #: apps/data/models.py:105
+#: apps/web/models.py:17
 msgid "user groups allowed"
 msgstr "grupos permitidos"
 
@@ -336,33 +337,90 @@ msgstr "observaciones de medusas"
 msgid "create observation"
 msgstr "Crea observación"
 
-#: apps/data/views.py:100
+#: apps/data/views.py:101
 msgid "Observation created"
 msgstr "Observación creada"
 
-#: apps/data/views.py:137
+#: apps/data/views.py:138
 msgid "Observation updated"
 msgstr "Observaciçon actualizada"
 
-#: apps/data/views.py:159
+#: apps/data/views.py:160
 msgid "Observation deleted"
 msgstr "Observación borrada"
 
-#: apps/web/models.py:8
+#: apps/web/forms.py:10
+msgid "first name"
+msgstr "nombre"
+
+#: apps/web/forms.py:11
+msgid "last name"
+msgstr "apellidos"
+
+#: apps/web/forms.py:12
+msgid "email address"
+msgstr "correo electrónico"
+
+#: apps/web/forms.py:13
+msgid "old password"
+msgstr "contraseña actual"
+
+#: apps/web/forms.py:15
+msgid "new password"
+msgstr "nueva contraseña"
+
+#: apps/web/forms.py:17
+msgid "repeat password"
+msgstr "repite la contraseña"
+
+#: apps/web/forms.py:28
+msgid "Old password is not correct"
+msgstr "La antigua contraseña no es correcta"
+
+#: apps/web/forms.py:40
+msgid "New and repeat passwords don't match"
+msgstr "Las nuevas contraseñas no coinciden"
+
+#: apps/web/forms.py:44
+msgid "You must indicate old password to change it"
+msgstr "Debes introducir la contraseña actual para poder cambiarla"
+
+#: apps/web/forms.py:54
+#, python-format
+msgid "%s Save"
+msgstr "%s Guarda"
+
+#: apps/web/forms.py:62
+msgid "Change password (optional)"
+msgstr "Cambia la contraseña (opcional)"
+
+#: apps/web/models.py:10
 msgid "Short title for menu"
 msgstr "Título corto para el menú"
 
-#: apps/web/models.py:9
+#: apps/web/models.py:11
+msgid "order"
+msgstr "orden"
+
+#: apps/web/models.py:12
 msgid "Introduction"
 msgstr "Introducción"
 
-#: apps/web/models.py:12
+#: apps/web/models.py:15
 msgid "related pages"
 msgstr "páginas relacionadas"
 
-#: apps/web/views.py:55
+#: apps/web/models.py:19
+msgid "page is just a container"
+msgstr "la página es un contenedor"
+
+#: apps/web/views.py:67
 msgid "Page not found"
 msgstr "Página no encontrada"
+
+#: apps/web/views.py:100
+msgid "Profile updated"
+msgstr "Perfil actualizado"
 
 #: templates/500.html:41
 msgid "Server error"
@@ -381,16 +439,20 @@ msgid "groups"
 msgstr "grupos"
 
 #: templates/_header_nav.html:53
+msgid "Change profile"
+msgstr "Modifica el perfil"
+
+#: templates/_header_nav.html:54
 msgid "Logout"
 msgstr "Salir"
 
-#: templates/_header_nav.html:58
+#: templates/_header_nav.html:59
 #: templates/registration/login.html:9
 #: templates/registration/login.html:39
 msgid "Login"
 msgstr "Identificación"
 
-#: templates/_header_nav.html:62
+#: templates/_header_nav.html:63
 msgid "Change language"
 msgstr "Cambiar idioma"
 
@@ -468,6 +530,33 @@ msgstr "Lista de playas"
 msgid "Route List"
 msgstr "Lista de rutas"
 
+#: templates/password_reset/recovery_form.html:4
+msgid "Password recovery"
+msgstr "Recupera la contraseña"
+
+#: templates/password_reset/recovery_form.html:13
+#: templates/registration/login.html:43
+msgid "Recover my password"
+msgstr "Recupera la contraseña"
+
+#: templates/password_reset/reset.html:4
+msgid "Password reset"
+msgstr "Nueva contraseña"
+
+#: templates/password_reset/reset.html:8
+#, python-format
+msgid "Sorry, this password reset link is invalid. You can still <a href=\"%(recovery_url)s\">request a new one</a>."
+msgstr "El enlace para recuperar la contraseña es inválido.  Puedes solicitar un <a href=\"%(recovery_url)s\">nuevo enlace para recuperar la contraseña</a>."
+
+#: templates/password_reset/reset.html:12
+#, python-format
+msgid "Hi, <strong>%(username)s</strong>. Please choose your new password."
+msgstr "Hola, <strong>%(username)s</strong>. Introduce tu nueva contraseña."
+
+#: templates/password_reset/reset.html:17
+msgid "Set new password"
+msgstr "Guarda la nueva contraseña"
+
 #: templates/registration/login.html:4
 msgid "Welcome to Jellyfish observations application"
 msgstr "Bienvenido/a a la aplicación de observación de medusas"
@@ -480,15 +569,15 @@ msgstr "El usuario y contraseña no son correctos. Prueba otra vez o contacta co
 msgid "Home"
 msgstr "Inicio"
 
-#: utils/widgets.py:9
+#: utils/widgets.py:10
 msgid "Beach opening"
 msgstr "Apertura de playa"
 
-#: utils/widgets.py:10
+#: utils/widgets.py:11
 msgid "Midday - 14h"
 msgstr "Mediodía (14h)"
 
-#: utils/widgets.py:11
+#: utils/widgets.py:12
 msgid "Beach closing"
 msgstr "Cierre de la playa"
 

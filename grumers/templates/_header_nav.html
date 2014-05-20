@@ -20,8 +20,8 @@
             {% recursetree pages %}
               {% if not node.registration_required or user.is_authenticated %}
               <li class="{% if not node.is_leaf_node %}dropdown{% endif %}  {% if request.path == node.url|chlocale:LANGUAGE_CODE  %}active{% endif %}">
-                <a href="{{ node.url|chlocale:LANGUAGE_CODE }}">
-                  {{ node.title }} {% if not node.is_leaf_node %}<b class="caret"></b>{% endif %}</a>
+                <a href="{% if node.is_container %}#{% else %}{{ node.url|chlocale:LANGUAGE_CODE }}{% endif %}">
+                  {{ node.title_menu }} {% if not node.is_leaf_node %}<b class="caret"></b>{% endif %}</a>
                 {% if not node.is_leaf_node %}
                 <ul class="dropdown-menu">
                     {{ children }}
@@ -50,6 +50,7 @@
             <li class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">{{ request.user.username }} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
+                    <li><a href="{% url 'web_change_profile' %}">{% trans 'Change profile' %}</a></li>
                     <li><a href="{% url 'django.contrib.auth.views.logout' %}">{% trans 'Logout' %}</a></li>
                 </ul>
             </li>

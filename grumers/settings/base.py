@@ -43,7 +43,8 @@ INSTALLED_APPS = (
     'localeurl',
     'modeltranslation',
     'sorl.thumbnail',
-
+    'password_reset',
+    'djrill',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -219,6 +220,9 @@ MODELTRANSLATION_FALLBACK_LANGUAGES = {
     'ca': ('es',),
 }
 GEOJSON_DEFAULT_SRID = 4326
+
+EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+MANDRILL_API_KEY = "Secret"
 
 #==============================================================================
 # This project settings

@@ -17,16 +17,17 @@ class PageForm(FlatpageForm):
 class PageAdmin(MPTTModelAdmin, TranslationAdmin, FlatPageAdmin):
     form = PageForm
     formfield_overrides = {TextField: {'widget': CKEditorWidget(config_name='default')}, }
-    filter_horizontal = ('related',)
+    filter_horizontal = ('related', 'groups',)
+    list_display = ('url', 'title', 'order', 'group_list')
     fieldsets = (
         (None, {
-            'fields': ('parent', 'url', 'title', 'title_menu', 'introduction',
+            'fields': ('parent', 'url', 'title', 'title_menu', 'order', 'introduction',
                        'content', 'sites')
         }),
         ('Advanced options', {
             'classes': ('collapse',),
-            'fields': ('related', 'enable_comments',
-                       'registration_required', 'template_name')
+            'fields': ('related', 'enable_comments', 'is_container',
+                       'registration_required', 'groups', 'template_name')
         }),
     )
 admin.site.unregister(FlatPage)

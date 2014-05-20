@@ -21,5 +21,6 @@ urlpatterns += patterns(
     (r'^data/', include('grumers.apps.data.urls')),
     (r'^login/?$', 'django.contrib.auth.views.login'),
     (r'^logout/?$', 'django.contrib.auth.views.logout', {'next_page': '/login'}),
+    (r'^password/', include('password_reset.urls')),
     (r'^', include('grumers.apps.web.urls')),
 )

@@ -20,6 +20,8 @@ django-bootstrap3-datetimepicker
 django-geojson
 django-localeurl
 django-modeltranslation
+django-password-reset
+djrill
 sorl-thumbnail
 fastkml
 # ODS and XLS export

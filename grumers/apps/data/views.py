@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import simplejson as json
 from django.contrib import messages
+from django.shortcuts import redirect
 from django.db.models import Sum, Max
 from django.core.exceptions import PermissionDenied
 from datetime import datetime
@@ -292,6 +293,17 @@ class ObservationRouteList(BasePageView, SingleTableView):
             routes = routes.filter(
                 groups__in=self.request.user.groups.all())
         return routes
+
+    def render_to_response(self, context):
+        if not context['object_list']:
+            # If there are no route list and the user has
+            # access to beaches, show beach list:
+            num_beaches = models.ObservationRoute.objects.filter(
+                route_type='B').filter(
+                groups__in=self.request.user.groups.all()).count()
+            if num_beaches > 0:
+                return redirect('data_beach_list')
+        return super(ObservationRouteList, self).render_to_response(context)
 
 
 class ObservationBeachList(ObservationRouteList):
