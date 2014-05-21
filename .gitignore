@@ -1,7 +1,11 @@
 *.pyc
 *.egg-info
+# Exclude ipython notebook files marked as local
+*local.ipynb
 grumers/settings/local.py
 grumers/settings/local/*
 docs/_build
 /static/
 /uploads/
+/data/
+/.ipynb_checkpoints/

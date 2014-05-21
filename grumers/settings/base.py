@@ -210,6 +210,17 @@ COMPRESS_OUTPUT_DIR = 'CACHE'
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
     'default': {
+        'toolbar_Full': [
+            ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript',
+             'Superscript', '-', 'RemoveFormat', 'Templates'],
+            ['TextColor', 'BGColor'],
+            ['Link', 'Anchor'],
+            ['Image', 'Flash', 'Table', 'HorizontalRule'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent',
+             '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter',
+             'JustifyRight', 'JustifyBlock'],
+            ['Source'],
+        ],
         'toolbar': 'Full',
     },
 }
