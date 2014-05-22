@@ -137,6 +137,7 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 
 MIDDLEWARE_CLASSES += (
     'localeurl.middleware.LocaleURLMiddleware',
+    'grumers.utils.middleware.FilterPersistMiddleware',
 )
 
 #==============================================================================
