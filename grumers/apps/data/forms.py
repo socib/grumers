@@ -150,6 +150,45 @@ class JellyfishObservationCreateForm(JellyfishObservationUpdateForm):
         super(JellyfishObservationCreateForm, self).__init__(*args, **kwargs)
 
 
+class JellyfishObservationBulkCreateForm(forms.Form):
+    observation_date = forms.DateField(label=_('observation date'), required=True)
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-sm-3'
+        self.helper.field_class = 'col-sm-5'
+        submit_button = StrictButton(
+            '<span class="glyphicon glyphicon-save"></span> ' +
+            unicode(_('Create bulk no-observations')),
+            css_class='btn btn-primary',
+            name='observation',
+            value='submit_observation',
+            type='submit')
+        cancel_button = StrictButton(
+            _('Cancel'),
+            css_class='btn',
+            name='cancel',
+            value='cancel',
+            type='submit')
+
+        self.helper.add_layout(
+            ExtendedLayout(
+                'observation_date',
+                ButtonHolder(
+                    submit_button,
+                    cancel_button,
+                ),
+            )
+        )
+        super(JellyfishObservationBulkCreateForm, self).__init__(*args, **kwargs)
+        self.fields['observation_date'].widget.format = '%d/%m/%Y'
+        self.fields['observation_date'].input_formats = ['%d/%m/%Y']
+
+        for key in self.fields:
+            self.fields[key].label = self.fields[key].label.capitalize()
+
+
 class JellyfishObservationFilterForm(forms.Form):
 
     jellyfish_specie = forms.ModelChoiceField(

@@ -23,6 +23,8 @@ django-modeltranslation
 django-password-reset
 djrill
 sorl-thumbnail
+djangocms-admin-style
+django-admin-shortcuts
 fastkml
 # ODS and XLS export
 openpyxl

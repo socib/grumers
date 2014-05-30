@@ -34,7 +34,7 @@ class JellyfishObservationTable(tables.Table):
 
     class Meta:
         model = models.JellyfishObservation
-        attrs = {"class": "table table-striped"}
+        attrs = {"class": "table table-striped table-condensed"}
         sequence = fields = (
             'date_observed',
             'observation_station',
@@ -53,10 +53,34 @@ class JellyfishObservationTable(tables.Table):
 
 class JellyfishObservationExportTable(JellyfishObservationTable):
     date_observed = tables.Column()
+    observation_route = tables.Column(
+        accessor='observation_station.observation_route.name')
 
     def __init__(self, *args, **kwargs):
         self.route = kwargs.pop('route', None)
         super(JellyfishObservationExportTable, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = models.JellyfishObservation
+        fields = (
+            'date_observed',
+            'observation_station',
+            'jellyfish_specie',
+            'quantity',
+            'created_by',
+            'source',
+            'sting_incidents',
+            'total_incidents'
+        )
+        sequence = (
+            'date_observed',
+            'observation_route',
+            'observation_station',
+            'jellyfish_specie',
+            'quantity',
+            'created_by',
+            'source',
+        )
 
 
 class JellyfishObservationAggregatedTable(tables.Table):
@@ -89,7 +113,7 @@ class JellyfishObservationAggregatedTable(tables.Table):
         super(JellyfishObservationAggregatedTable, self).__init__(*args, **kwargs)
 
     class Meta:
-        attrs = {"class": "table table-striped"}
+        attrs = {"class": "table table-striped table-condensed"}
 
 
 class ObservationRouteTable(tables.Table):
@@ -106,10 +130,18 @@ class ObservationRouteTable(tables.Table):
             {% trans 'Add' %} {% trans 'observation' %}
             </a>""",
         verbose_name=_('create observation'))
+    create_bulk_observation = tables.TemplateColumn(
+        """{% load i18n %}
+           <a class="btn btn-warning"
+            href="{% url 'data_route_observation_bulkcreate' record.pk %}">
+            <i class="glyphicon glyphicon-plus"></i>
+            {% trans 'Add bulk no-observations' %}
+            </a>""",
+        verbose_name=_('create bulk no-observations'))
 
     class Meta:
         model = models.ObservationRoute
-        attrs = {"class": "table table-striped"}
+        attrs = {"class": "table table-striped table-condensed"}
         fields = (
             'name',
         )
@@ -131,10 +163,18 @@ class ObservationBeachTable(tables.Table):
             {% trans 'Add' %} {% trans 'observation' %}
             </a>""",
         verbose_name=_('create observation'))
+    create_bulk_observation = tables.TemplateColumn(
+        """{% load i18n %}
+           <a class="btn btn-warning"
+            href="{% url 'data_route_observation_bulkcreate' record.pk %}">
+            <i class="glyphicon glyphicon-plus"></i>
+            {% trans 'Add bulk no-observations' %}
+            </a>""",
+        verbose_name=_('create bulk no-observations'))
 
     class Meta:
         model = models.ObservationRoute
-        attrs = {"class": "table table-striped"}
+        attrs = {"class": "table table-striped table-condensed"}
         fields = (
             'name',
             'island',

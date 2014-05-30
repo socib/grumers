@@ -187,9 +187,10 @@ class ObservationStation(models.Model):
 
 
 class JellyfishObservation(models.Model):
-    WEBFORM, API, BULK = ('W', 'A', 'B')
+    WEBFORM, API, BULK, WEBBULK = ('W', 'A', 'B', 'WB')
     SOURCE_CHOICES = (
         (WEBFORM, _('Web Form')),
+        (WEBBULK, _('Web Form (Bulk)')),
         (API, _('API')),
         (BULK, _('Bulk upload')),
     )

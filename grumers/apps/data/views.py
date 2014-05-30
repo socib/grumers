@@ -2,7 +2,7 @@
 from grumers.apps.web.views import BasePageView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.list import BaseListView
 from django_tables2.views import SingleTableView
 from django.http import HttpResponseRedirect, HttpResponse
@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.db.models import Sum, Max
 from django.core.exceptions import PermissionDenied
-from datetime import datetime
+from datetime import datetime, date
 from grumers.utils import exporter
 import models
 import forms
@@ -137,6 +137,76 @@ class JellyfishObservationUpdate(JellyfishObservationMixin, UpdateView):
         # Notify that in messages area
         messages.add_message(self.request, messages.SUCCESS, _('Observation updated'))
         return super(JellyfishObservationUpdate, self).form_valid(form)
+
+
+class JellyfishObservationBulkCreate(FormView, BasePageView):
+    """Bulk create of empty Jellyfish Observations for a route and a day
+    """
+
+    template_name = "data/jellyfishobservation_bulkcreate.html"
+    form_class = forms.JellyfishObservationBulkCreateForm
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        pk_route = kwargs.get('pk_route', None)
+        if pk_route:
+            self.route = models.ObservationRoute.objects.get(pk=pk_route)
+            # Check if user is member of a group in route groups (if it has any)
+            if not request.user.is_superuser and self.route.groups and\
+               not (request.user.groups.all() & self.route.groups.all()):
+                raise PermissionDenied()
+        else:
+            raise ValueError(_("Route reference missed"))
+        return super(JellyfishObservationBulkCreate, self).dispatch(
+            request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(JellyfishObservationBulkCreate, self).get_context_data(**kwargs)
+        context['route'] = self.route
+        return context
+
+    def get_initial(self):
+        initial = super(JellyfishObservationBulkCreate, self).get_initial()
+        initial = initial.copy()
+        initial['observation_date'] = date.today()
+        return initial
+
+    def post(self, request, *args, **kwargs):
+        if "cancel" in request.POST:
+            url = self.get_success_url()
+            return HttpResponseRedirect(url)
+        return super(JellyfishObservationBulkCreate, self).post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        observation_date = form.cleaned_data['observation_date']
+        obs_dt = datetime.combine(observation_date, datetime.min.time())
+        for station in self.route.observationstation_set.all():
+            if self.route.route_type == 'B':
+                # For a beach, 3 observations
+                for hour in [10, 14, 18]:
+                    obs = models.JellyfishObservation()
+                    obs_dt = obs_dt.replace(hour=hour)
+                    obs.date_observed = obs_dt
+                    obs.observation_station = station
+                    obs.jellyfish_specie = None
+                    obs.quantity = 0
+                    obs.source = models.JellyfishObservation.WEBBULK
+                    obs.save(user=self.request.user)
+            else:
+                obs = models.JellyfishObservation()
+                obs.date_observed = obs_dt
+                obs.observation_station = station
+                obs.jellyfish_specie = None
+                obs.quantity = 0
+                obs.source = models.JellyfishObservation.WEBBULK
+                obs.save(user=self.request.user)
+
+        # Notify that in messages area
+        messages.add_message(self.request, messages.SUCCESS, _('Observations created'))
+        return super(JellyfishObservationBulkCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('data_route_observation_list', args=[self.route.pk])
 
 
 class JellyfishObservationDelete(JellyfishObservationMixin, DeleteView):

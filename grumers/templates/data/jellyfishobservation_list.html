@@ -26,6 +26,7 @@
     {% endif %}
     {% if route %}
       <a class="btn btn-primary" href="{% url 'data_route_observation_create' route.pk %}"><i class="glyphicon glyphicon-plus"></i> {% trans 'Add' %} {% trans 'observation' %}</a>
+      <a class="btn btn-warning" href="{% url 'data_route_observation_bulkcreate' route.pk %}"><i class="glyphicon glyphicon-plus"></i> {% trans 'Add bulk no-observations' %}</a>
     {% else %}
       <a class="btn btn-primary" href="{% url 'data_observation_create' %}"><i class="glyphicon glyphicon-plus"></i> {% trans 'Add' %} {% trans 'observation' %}</a>
     {% endif %}

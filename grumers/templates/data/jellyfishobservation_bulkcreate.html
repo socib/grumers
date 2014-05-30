@@ -1,0 +1,19 @@
+{% extends "data/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block title_head %}{{ block.super }}: {% trans "Create Bulk Observations" %}{% endblock %}
+
+{% block title %}
+{% trans "Create Bulk Observations" %}
+<span class="route">{{ route.name }}</span>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-7">
+    {% crispy form %}
+  </div>
+</div>
+{% endblock %}

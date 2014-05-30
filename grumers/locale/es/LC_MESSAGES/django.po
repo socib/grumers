@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-20 14:54+0200\n"
-"PO-Revision-Date: 2014-05-20 15:05+0100\n"
+"POT-Creation-Date: 2014-05-30 14:02+0200\n"
+"PO-Revision-Date: 2014-05-30 14:09+0100\n"
 "Last-Translator: Biel Frontera <bfrontera@socib.es>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -44,6 +44,7 @@ msgid "%s Create observation and continue with next station"
 msgstr "%s Guarda y pasa al siguiente punto"
 
 #: apps/data/forms.py:76
+#: apps/data/forms.py:169
 msgid "Cancel"
 msgstr "Cancela"
 
@@ -60,8 +61,8 @@ msgid "Incidents during the day"
 msgstr "Incidencias al largo del día"
 
 #: apps/data/forms.py:118
-#: apps/data/models.py:198
-#: apps/data/models.py:248
+#: apps/data/models.py:199
+#: apps/data/models.py:249
 msgid "None"
 msgstr "Ninguna"
 
@@ -69,60 +70,68 @@ msgstr "Ninguna"
 msgid "Create"
 msgstr "Crea"
 
-#: apps/data/forms.py:157
+#: apps/data/forms.py:154
+msgid "observation date"
+msgstr "Fecha de la observación"
+
+#: apps/data/forms.py:163
+msgid "Create bulk no-observations"
+msgstr "Crea no-observaciones masivas"
+
+#: apps/data/forms.py:196
 msgid "specie"
 msgstr "especie"
 
-#: apps/data/forms.py:158
+#: apps/data/forms.py:197
 msgid "Specie: all"
 msgstr "Especie: todas"
 
-#: apps/data/forms.py:162
+#: apps/data/forms.py:201
 #: apps/data/models.py:34
 #: apps/data/models.py:111
 #: apps/data/models.py:157
-#: apps/data/models.py:230
+#: apps/data/models.py:231
 msgid "created by"
 msgstr "creado por"
 
-#: apps/data/forms.py:163
+#: apps/data/forms.py:202
 msgid "User: all"
 msgstr "Usuario: todos"
 
-#: apps/data/forms.py:167
+#: apps/data/forms.py:206
 #: apps/data/models.py:118
 #: apps/data/models.py:147
 msgid "observation route"
 msgstr "ruta de observación"
 
-#: apps/data/forms.py:168
+#: apps/data/forms.py:207
 msgid "Route: all"
 msgstr "Ruta: todas"
 
-#: apps/data/forms.py:172
+#: apps/data/forms.py:211
 #: apps/data/models.py:166
-#: apps/data/models.py:208
+#: apps/data/models.py:209
 msgid "observation station"
 msgstr "punto de observación"
 
-#: apps/data/forms.py:173
+#: apps/data/forms.py:212
 msgid "Station: all"
 msgstr "Puntos: todos"
 
-#: apps/data/forms.py:176
-#: apps/data/models.py:216
+#: apps/data/forms.py:215
+#: apps/data/models.py:217
 msgid "source"
 msgstr "fuente"
 
-#: apps/data/forms.py:177
+#: apps/data/forms.py:216
 msgid "from date"
 msgstr "desde fecha"
 
-#: apps/data/forms.py:185
+#: apps/data/forms.py:224
 msgid "Filter"
 msgstr "Filtra"
 
-#: apps/data/forms.py:191
+#: apps/data/forms.py:230
 msgid "Export"
 msgstr "Exporta"
 
@@ -144,7 +153,7 @@ msgid "description"
 msgstr "descripción"
 
 #: apps/data/models.py:26
-#: apps/data/models.py:213
+#: apps/data/models.py:214
 msgid "picture"
 msgstr "fotografía"
 
@@ -155,26 +164,26 @@ msgstr "Orden visualización"
 #: apps/data/models.py:31
 #: apps/data/models.py:108
 #: apps/data/models.py:154
-#: apps/data/models.py:227
+#: apps/data/models.py:228
 msgid "date added"
 msgstr "fecha alta"
 
 #: apps/data/models.py:35
 #: apps/data/models.py:112
 #: apps/data/models.py:158
-#: apps/data/models.py:231
+#: apps/data/models.py:232
 msgid "date modified"
 msgstr "fecha modificación"
 
 #: apps/data/models.py:38
 #: apps/data/models.py:115
 #: apps/data/models.py:161
-#: apps/data/models.py:234
+#: apps/data/models.py:235
 msgid "update by"
 msgstr "actualizado por"
 
 #: apps/data/models.py:41
-#: apps/data/models.py:211
+#: apps/data/models.py:212
 msgid "jellyfish specie"
 msgstr "especie de medusa"
 
@@ -277,65 +286,74 @@ msgid "Web Form"
 msgstr "Formulario web"
 
 #: apps/data/models.py:193
+msgid "Web Form (Bulk)"
+msgstr "Formulario web (masiva)"
+
+#: apps/data/models.py:194
 msgid "API"
 msgstr "API"
 
-#: apps/data/models.py:194
+#: apps/data/models.py:195
 msgid "Bulk upload"
 msgstr "importación masiva"
 
-#: apps/data/models.py:199
+#: apps/data/models.py:200
 msgid "One"
 msgstr "Una"
 
-#: apps/data/models.py:200
+#: apps/data/models.py:201
 msgid "2 to 5"
 msgstr "2 hasta 5"
 
-#: apps/data/models.py:201
+#: apps/data/models.py:202
 msgid "6 to 10"
 msgstr "6 hasta 10"
 
-#: apps/data/models.py:202
+#: apps/data/models.py:203
 msgid "11 to 99"
 msgstr "11 hasta 99"
 
-#: apps/data/models.py:203
+#: apps/data/models.py:204
 msgid "100 or more"
 msgstr "100 o más"
 
-#: apps/data/models.py:206
+#: apps/data/models.py:207
 msgid "observation date and time"
 msgstr "fecha y hora observación"
 
-#: apps/data/models.py:212
+#: apps/data/models.py:213
 msgid "quantity observed"
 msgstr "cantidad observada"
 
-#: apps/data/models.py:219
+#: apps/data/models.py:220
 msgid "remarks"
 msgstr "comentarios"
 
-#: apps/data/models.py:221
+#: apps/data/models.py:222
 msgid "total sting incidents"
 msgstr "picaduras totales"
 
-#: apps/data/models.py:224
+#: apps/data/models.py:225
 msgid "total incidents"
 msgstr "incidentes totales"
 
-#: apps/data/models.py:237
+#: apps/data/models.py:238
 msgid "jellyfish observation"
 msgstr "observación de medusas"
 
-#: apps/data/models.py:238
+#: apps/data/models.py:239
 msgid "jellyfish observations"
 msgstr "observaciones de medusas"
 
-#: apps/data/tables.py:108
-#: apps/data/tables.py:133
+#: apps/data/tables.py:132
+#: apps/data/tables.py:165
 msgid "create observation"
 msgstr "Crea observación"
+
+#: apps/data/tables.py:140
+#: apps/data/tables.py:173
+msgid "create bulk no-observations"
+msgstr "Crea no-observaciones masivas"
 
 #: apps/data/views.py:101
 msgid "Observation created"
@@ -345,7 +363,15 @@ msgstr "Observación creada"
 msgid "Observation updated"
 msgstr "Observaciçon actualizada"
 
-#: apps/data/views.py:160
+#: apps/data/views.py:159
+msgid "Route reference missed"
+msgstr "Referencia de la ruta no encontrada"
+
+#: apps/data/views.py:205
+msgid "Observations created"
+msgstr "Observaciones creadas"
+
+#: apps/data/views.py:230
 msgid "Observation deleted"
 msgstr "Observación borrada"
 
@@ -422,6 +448,22 @@ msgstr "Página no encontrada"
 msgid "Profile updated"
 msgstr "Perfil actualizado"
 
+#: settings/base.py:253
+msgid "Website"
+msgstr "Sitio web"
+
+#: settings/base.py:261
+msgid "Observations"
+msgstr "Observaciones"
+
+#: settings/base.py:265
+msgid "Routes"
+msgstr "Rutas"
+
+#: settings/base.py:269
+msgid "Beaches"
+msgstr "Playas"
+
 #: templates/500.html:41
 msgid "Server error"
 msgstr "Error en el servidor"
@@ -455,6 +497,11 @@ msgstr "Identificación"
 #: templates/_header_nav.html:63
 msgid "Change language"
 msgstr "Cambiar idioma"
+
+#: templates/data/jellyfishobservation_bulkcreate.html:6
+#: templates/data/jellyfishobservation_bulkcreate.html:9
+msgid "Create Bulk Observations"
+msgstr "Crea observaciones"
 
 #: templates/data/jellyfishobservation_create.html:5
 #: templates/data/jellyfishobservation_create.html:8
@@ -493,14 +540,18 @@ msgid "Show observation heatmap"
 msgstr "Muestra el mapa de calor"
 
 #: templates/data/jellyfishobservation_list.html:28
-#: templates/data/jellyfishobservation_list.html:30
+#: templates/data/jellyfishobservation_list.html:31
 msgid "Add"
 msgstr "Nueva"
 
 #: templates/data/jellyfishobservation_list.html:28
-#: templates/data/jellyfishobservation_list.html:30
+#: templates/data/jellyfishobservation_list.html:31
 msgid "observation"
 msgstr "observación"
+
+#: templates/data/jellyfishobservation_list.html:29
+msgid "Add bulk no-observations"
+msgstr "Alta no-observaciones masivas"
 
 #: templates/data/jellyfishobservation_map.html:7
 #: templates/data/jellyfishobservation_map.html:10

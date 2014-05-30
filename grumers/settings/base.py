@@ -3,6 +3,7 @@
 """Base settings shared by all environments"""
 # Import global settings to make it easier to extend settings.
 from django.conf.global_settings import *   # pylint: disable=W0614,W0401
+from django.utils.translation import ugettext_lazy as _
 
 #==============================================================================
 # Generic Django project settings
@@ -45,6 +46,8 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'password_reset',
     'djrill',
+    'admin_shortcuts',
+    'djangocms_admin_style',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -240,6 +243,41 @@ MANDRILL_API_KEY = "Secret"
 
 AUTH_LDAP_SERVER_URI = "ldap://ldap.example.com"
 
+ADMIN_SHORTCUTS_SETTINGS = {
+    'hide_app_list': False,
+    'open_new_window': False,
+}
+
+ADMIN_SHORTCUTS = [
+    {
+        'title': _('Website'),
+        'shortcuts': [
+            {
+                'url': '/',
+                'open_new_window': True,
+            },
+            {
+                'url_name': 'data_observation_list',
+                'title': _('Observations'),
+            },
+            {
+                'url_name': 'data_route_list',
+                'title': _('Routes'),
+            },
+            {
+                'url_name': 'data_beach_list',
+                'title': _('Beaches'),
+            },
+        ]
+    },
+]
+
+ADMIN_SHORTCUTS_CLASS_MAPPINGS = [
+    ['data_observation_list', 'folder'],
+    ['data_route_list', 'picture'],
+    ['data_beach_list', 'blog'],
+    ['home', 'home'],
+]
 #==============================================================================
 # This project settings
 #==============================================================================
