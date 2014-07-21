@@ -9,7 +9,8 @@ import widgets
 
 class AuditModelAdmin(admin.ModelAdmin):
     readonly_fields = ('created_by', 'updated_by',)
-    formfield_overrides = {TextField: {'widget': CKEditorWidget(config_name='default')}, }
+    formfield_overrides = {TextField: {'widget': CKEditorWidget(
+        config_name='default')}, }
 
     def save_model(self, request, obj, form, change):
         obj.save(user=request.user)
@@ -17,11 +18,11 @@ class AuditModelAdmin(admin.ModelAdmin):
 
 class JellyfishSpeciesAdmin(AuditModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
-    list_display = ('name', 'common_name',)
+    list_display = ('name', 'common_name', 'active',)
 
 
 class ObservationRouteAdmin(AuditModelAdmin):
-    list_display = ('name', 'group_list',)
+    list_display = ('name', 'group_list', 'active',)
     filter_horizontal = ('groups',)
 
     def save_model(self, request, obj, form, change):
@@ -33,7 +34,8 @@ class ObservationRouteAdmin(AuditModelAdmin):
 
 
 class ObservationStationAdmin(AuditModelAdmin):
-    list_display = ('observation_route', 'name', 'position_coordinates', 'order')
+    list_display = ('observation_route', 'name', 'position_coordinates',
+                    'order', 'active',)
     list_filter = ['observation_route']
     # openlayers_url = 'js/open_layers/OpenLayers.js'
 

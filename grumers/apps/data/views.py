@@ -44,7 +44,7 @@ class JellyfishObservationMixin(BasePageView):
         if self.date:
             self.date = datetime.strptime(self.date, '%Y%m%d%H%M')
         self.next_station = None
-        self.station_list = models.ObservationStation.objects.all()
+        self.station_list = models.ObservationStation.objects.filter(disabled=False)
         if self.route:
             self.station_list = self.station_list.filter(observation_route=self.route)
         return super(JellyfishObservationMixin, self).dispatch(request, *args, **kwargs)
@@ -103,6 +103,7 @@ class JellyfishObservationCreate(JellyfishObservationMixin, CreateView):
             # calculate next station
             station = models.ObservationStation.objects.filter(
                 observation_route=self.object.observation_station.observation_route,
+                disabled=False,
                 order__gte=self.object.observation_station.order)\
                 .exclude(pk__in=[self.object.observation_station.pk])\
                 .order_by('order')
@@ -180,7 +181,7 @@ class JellyfishObservationBulkCreate(FormView, BasePageView):
     def form_valid(self, form):
         observation_date = form.cleaned_data['observation_date']
         obs_dt = datetime.combine(observation_date, datetime.min.time())
-        for station in self.route.observationstation_set.all():
+        for station in self.route.observationstation_set.filter(disabled=False):
             if self.route.route_type == 'B':
                 # For a beach, 3 observations
                 for hour in [10, 14, 18]:
@@ -392,7 +393,7 @@ class ObservationBeachList(ObservationRouteList):
 class JSONJellyfishSpecieList(BaseListView):
 
     def get_queryset(self):
-        return models.JellyfishSpecie.objects.all()
+        return models.JellyfishSpecie.objects.filter(disabled=False)
 
     def render_to_response(self, context):
         "Returns a JSON response"

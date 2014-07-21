@@ -73,6 +73,12 @@ class GenericPageView(DetailView, BasePageView):
             return redirect('/login/')
         return super(GenericPageView, self).get(*args, **kwargs)
 
+    def get_template_names(self):
+        if self.object.template_name:
+            return [self.object.template_name]
+        else:
+            return super(GenericPageView, self).get_template_names()
+
 
 class ChangeProfileView(FormView, BasePageView):
 

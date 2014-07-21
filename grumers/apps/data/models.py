@@ -27,6 +27,7 @@ class JellyfishSpecie(models.Model):
                                 upload_to=generate_image_path('jellyfish_species/'),
                                 default='jellyfish_species/no-img.jpg')
     order = models.IntegerField(_('display order'))
+    disabled = models.BooleanField(_('disabled'), default=False)
     # Audit
     created_on = models.DateTimeField(_('date added'), auto_now_add=True)
     created_by = models.ForeignKey(User, blank=True, null=True,
@@ -44,6 +45,10 @@ class JellyfishSpecie(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def active(self):
+        return not self.disabled
+    active.boolean = True
 
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -104,6 +109,7 @@ class ObservationRoute(models.Model):
                                     null=True, blank=True)
     groups = models.ManyToManyField(Group, verbose_name=_('user groups allowed'),
                                     blank=True, null=True)
+    disabled = models.BooleanField(_('disabled'), default=False)
     # Audit
     created_on = models.DateTimeField(_('date added'), auto_now_add=True)
     created_by = models.ForeignKey(User, blank=True, null=True,
@@ -125,6 +131,10 @@ class ObservationRoute(models.Model):
     @property
     def group_list(self):
         return ', '.join([group.name for group in self.groups.all()])
+
+    def active(self):
+        return not self.disabled
+    active.boolean = True
 
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -150,6 +160,7 @@ class ObservationStation(models.Model):
     station_type = models.CharField(_('type'), max_length=1,
                                     choices=STATION_TYPE_CHOICES,
                                     default='S')
+    disabled = models.BooleanField(_('disabled'), default=False)
     # Audit
     created_on = models.DateTimeField(_('date added'), auto_now_add=True)
     created_by = models.ForeignKey(User, blank=True, null=True,
@@ -177,6 +188,10 @@ class ObservationStation(models.Model):
     @property
     def longname(self):
         return " - ".join([self.observation_route.name, self.name])
+
+    def active(self):
+        return not self.disabled
+    active.boolean = True
 
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)

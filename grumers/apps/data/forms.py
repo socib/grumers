@@ -122,6 +122,7 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
         station_queryset = self.fields['observation_station'].queryset
         if route:
             station_queryset = station_queryset.filter(observation_route=route)
+        station_queryset = station_queryset.filter(disabled=False)
         self.fields['observation_station'].queryset = station_queryset
 
         self.fields['quantity'].widget = forms.Select(
@@ -192,7 +193,7 @@ class JellyfishObservationBulkCreateForm(forms.Form):
 class JellyfishObservationFilterForm(forms.Form):
 
     jellyfish_specie = forms.ModelChoiceField(
-        models.JellyfishSpecie.objects.all(),
+        models.JellyfishSpecie.objects.filter(disabled=False),
         label=_('specie'),
         empty_label=_('Specie: all'),
         required=False)
@@ -202,12 +203,12 @@ class JellyfishObservationFilterForm(forms.Form):
         empty_label=_('User: all'),
         required=False)
     route = forms.ModelChoiceField(
-        models.ObservationRoute.objects.all(),
+        models.ObservationRoute.objects.filter(disabled=False),
         label=_('observation route'),
         empty_label=_('Route: all'),
         required=False)
     station = forms.ModelChoiceField(
-        models.ObservationStation.objects.all(),
+        models.ObservationStation.objects.filter(disabled=False),
         label=_('observation station'),
         empty_label=_('Station: all'),
         required=False)
