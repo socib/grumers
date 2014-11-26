@@ -215,6 +215,7 @@ class JellyfishObservationFilterForm(forms.Form):
     source = forms.MultipleChoiceField(
         models.JellyfishObservation.SOURCE_CHOICES, label=_('source'), required=False)
     from_date = forms.DateField(label=_('from date'), required=False)
+    to_date = forms.DateField(label=_('to date'), required=False)
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -237,6 +238,8 @@ class JellyfishObservationFilterForm(forms.Form):
         super(JellyfishObservationFilterForm, self).__init__(*args, **kwargs)
         self.fields['from_date'].widget.format = '%d/%m/%Y'
         self.fields['from_date'].input_formats = ['%d/%m/%Y']
+        self.fields['to_date'].widget.format = '%d/%m/%Y'
+        self.fields['to_date'].input_formats = ['%d/%m/%Y']
         if not user.has_perm('data.can_list_others_jellyfishobservations'):
             self.fields['created_by'].queryset = User.objects.filter(
                 id__in=[user.id])

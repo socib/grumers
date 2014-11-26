@@ -301,6 +301,9 @@ class JellyfishObservationList(BasePageView, SingleTableView):
             if self.form.cleaned_data.get('from_date'):
                 data = data.filter(
                     date_observed__gte=self.form.cleaned_data['from_date'])
+            if self.form.cleaned_data.get('to_date'):
+                data = data.filter(
+                    date_observed__lte=self.form.cleaned_data['to_date'])
         data = data.order_by('-date_observed')
         return data
 
