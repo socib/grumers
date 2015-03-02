@@ -19,7 +19,7 @@ django-crispy-forms
 django-bootstrap3-datetimepicker
 django-geojson
 django-localeurl
-django-modeltranslation
+django-modeltranslation==0.7.3
 django-password-reset
 djrill
 sorl-thumbnail
@@ -27,7 +27,7 @@ djangocms-admin-style
 django-admin-shortcuts
 fastkml
 # ODS and XLS export
-openpyxl
+openpyxl==1.8.5
 # LDAP integration (+ aptitude install libldap2-dev libsasl2-dev )
 python-ldap
 django-auth-ldap

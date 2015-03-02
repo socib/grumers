@@ -1,4 +1,4 @@
-JellyfishObservationMap = {
+ObservationStationMap = {
     COLORPALETTE: ['rgb(254,240,217)', 'rgb(253,212,158)', 'rgb(253,187,132)', 'rgb(252,141,89)', 'rgb(227,74,51)', 'rgb(179,0,0)'],
     color_step: null,
     map: null,
@@ -6,16 +6,15 @@ JellyfishObservationMap = {
     generate: function(container, data) {
         // Set max value:
         var max_value = data[0].count;
-        JellyfishObservationMap.color_step = max_value / (JellyfishObservationMap.COLORPALETTE.length - 1);
+        ObservationStationMap.color_step = max_value / (ObservationStationMap.COLORPALETTE.length - 1);
 
         var map_options = {
             projection: new OpenLayers.Projection("EPSG:3857"),
             displayProjection: new OpenLayers.Projection("EPSG:4326")
         };
         var map = new OpenLayers.Map(container, map_options);
-        JellyfishObservationMap.map = map;
+        ObservationStationMap.map = map;
         var osmLayer = new OpenLayers.Layer.OSM();
-
         var emodnetBathymetryLayer = new OpenLayers.Layer.WMS("EMODnet bathymetry",
             "http://ows.emodnet-bathymetry.eu/wms", {
                 layers: 'emodnet:mean_atlas_land',
@@ -34,8 +33,8 @@ JellyfishObservationMap = {
             });
 
         var style = OpenLayers.Util.extend({}, OpenLayers.Feature.Vector.style['default']);
+        //style.fillColor = 'red';
         style.fillColor = '${fillColor}';
-        // style.fillColor = 'red';
         style.fillOpacity = 1;
         style.pointRadius = 5;
         style.pointRadius = 5;
@@ -46,7 +45,7 @@ JellyfishObservationMap = {
 
         var stationDefaultStyle = new OpenLayers.Style(style, {
             context: {
-                fillColor: JellyfishObservationMap.fillColor
+                fillColor: ObservationStationMap.fillColor
             }
         });
         var stationPointStyle = new OpenLayers.StyleMap({
@@ -59,21 +58,21 @@ JellyfishObservationMap = {
             }
         });
         map.addLayers([stationsLayer, osmLayer, emodnetBathymetryLayer]);
-        JellyfishObservationMap.addDataToLayer(stationsLayer, data);
+        ObservationStationMap.addDataToLayer(stationsLayer, data);
         map.zoomToExtent(stationsLayer.getDataExtent());
 
         var selectFeatureControl = new OpenLayers.Control.SelectFeature(stationsLayer, {
             multiple: false,
-            onSelect: JellyfishObservationMap.onFeatureSelect,
-            onUnselect: JellyfishObservationMap.onFeatureUnselect
+            onSelect: ObservationStationMap.onFeatureSelect,
+            onUnselect: ObservationStationMap.onFeatureUnselect
         });
         map.addControl(selectFeatureControl);
         selectFeatureControl.activate();
 
     },
     fillColor: function(feature) {
-        var position = Math.round(feature.attributes.count / JellyfishObservationMap.color_step);
-        return JellyfishObservationMap.COLORPALETTE[position];
+        var position = Math.round(feature.attributes.count / ObservationStationMap.color_step);
+        return ObservationStationMap.COLORPALETTE[position];
     },
     addDataToLayer: function(layer, data) {
         var points = [];
@@ -90,13 +89,13 @@ JellyfishObservationMap = {
         var popup = new OpenLayers.Popup.FramedCloud("popup",
             feature.geometry.getBounds().getCenterLonLat(),
             null,
-            JellyfishObservationMap.printPopUpContent(feature),
-            null, true, JellyfishObservationMap.onPopupClose);
+            ObservationStationMap.printPopUpContent(feature),
+            null, true, ObservationStationMap.onPopupClose);
         feature.popup = popup;
-        JellyfishObservationMap.map.addPopup(popup);
+        ObservationStationMap.map.addPopup(popup);
     },
     onFeatureUnselect: function(feature) {
-        JellyfishObservationMap.map.removePopup(feature.popup);
+        ObservationStationMap.map.removePopup(feature.popup);
         feature.popup.destroy();
         feature.popup = null;
     },
@@ -107,51 +106,3 @@ JellyfishObservationMap = {
     },
 
 };
-
-
-/*
-        onLoadedLayers: function() {
-
-            if(Drifter.Map.totalDeployments * 2 > Drifter.aLayers.length){
-                return;
-            }
-
-            // Add feature control to display the popup
-            Drifter.selectControl = new OpenLayers.Control.SelectFeature(Drifter.aLayers,
-            {onSelect: Drifter.Map.onFeatureSelect, onUnselect: Drifter.Map.onFeatureUnselect});
-            Drifter.map.addControl(Drifter.selectControl);
-            Drifter.selectControl.activate();
-
-            //var bounds = new OpenLayers.Bounds();
-            //for (vectorBounds in vectorsBounds){
-                //bounds.extend(vectorsBounds);
-            //}
-
-            //map.setCenter(bounds.getCenterLatLon());
-            //map.zoomToExtent(vectorsBounds);
-
-        },
-        printPopUpContent: function(feature){
-            // Getting the popup html content from the properties.html fearture
-            return feature.data['html'];
-        },
-        onFeatureSelect: function(feature) {
-
-            Drifter.selectedFeature = feature;
-            popup = new OpenLayers.Popup.FramedCloud("chicken",
-                                     feature.geometry.getBounds().getCenterLonLat(),
-                                     null,
-                                     Drifter.Map.printPopUpContent(feature),
-                                     null, true, Drifter.Map.onPopupClose);
-            feature.popup = popup;
-            Drifter.map.addPopup(popup);
-        },
-        onPopupClose: function (evt) {
-            Drifter.selectControl.unselect(Drifter.selectedFeature);
-        },
-        onFeatureUnselect: function(feature) {
-            Drifter.map.removePopup(feature.popup);
-            feature.popup.destroy();
-            feature.popup = null;
-        }
-*/

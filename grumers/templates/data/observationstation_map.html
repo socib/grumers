@@ -1,0 +1,46 @@
+{% extends "data/base.html" %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block title_head %}{{ block.super }}: {% trans "Observation Station Map" %}{% endblock %}
+
+{% block title %}
+{% trans "Observation Station Map" %}
+{% if route %}
+  <span class="route">{{ route.name }}</span>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-3">
+    {% crispy form %}
+    <a class="btn btn-info btn-block" style="display:block; margin-top: 20px;" href="{% url 'data_observation_list' %}"><i class="glyphicon glyphicon-list"></i> {% trans 'Show observation station list' %}</a>
+  </div>
+  <div class="col-sm-9">
+    <div id="map" style="width:100%; height:600px;">
+    {% if not table.rows %}
+    <h2>{% trans "No stations found" %}</h2>
+    {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block page_js %}
+  <script src="{% static "js/open_layers/OpenLayers.js" %}"></script>
+  <script src="{% static "js/observationstation_map.js" %}"></script>
+  <script type="text/javascript">
+    $(function() {
+        /* prepare data */
+        var data = {{ table.json|safe }};
+        if (data.length == 0){
+          return;
+        }
+        ObservationStationMap.generate('map', data);
+    });
+  </script>
+{% endblock page_js %}
+

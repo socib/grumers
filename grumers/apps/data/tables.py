@@ -180,3 +180,51 @@ class ObservationBeachTable(tables.Table):
             'island',
             'municipality',
         )
+
+
+class ObservationStationTable(tables.Table):
+    name = tables.Column()
+    observation_route = tables.Column()
+    station_type = tables.Column()
+
+    class Meta:
+        model = models.ObservationStation
+        attrs = {"class": "table table-striped table-condensed"}
+        fields = (
+            'name',
+            'observation_route',
+            'station_type'
+        )
+
+
+class ObservationStationGeoTable(tables.Table):
+    x = tables.Column(empty_values=())
+    y = tables.Column(empty_values=())
+    name = tables.Column()
+    observation_route = tables.Column()
+    station_type = tables.Column()
+
+    def render_x(self, record):
+        return "{:.6f}".format(GEOSGeometry(record['position']).x)
+
+    def render_y(self, record):
+        return "{:.6f}".format(GEOSGeometry(record['position']).y)
+
+    @property
+    def json(self):
+        data = []
+        for record in self.rows:
+            data.append({
+                'lat': float(record['y']),
+                'lng': float(record['x']),
+                'station': record['name'],
+                'route': record['observation_route']})
+        return simplejson.dumps(data)
+
+    def __init__(self, *args, **kwargs):
+        self.route = kwargs.pop('route', None)
+        super(ObservationStationGeoTable, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = models.ObservationStation
+        attrs = {"class": "table table-striped table-condensed"}

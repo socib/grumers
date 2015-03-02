@@ -21,7 +21,7 @@
     <a class="btn btn-info btn-block" style="display:block;  margin-top: 20px;" href="{% if route %}{% url 'data_route_observation_heatmap' route.pk %}{% else %}{% url 'data_observation_heatmap' %}{% endif %}"><i class="glyphicon glyphicon-map-marker"></i> {% trans 'Show observation heatmap' %}</a>
   </div>
   <div class="col-sm-9">
-    <div id="map" style="width:90%; height:500px;">
+    <div id="map" style="width:100%; height:600px;">
     {% if not table.rows %}
     <h2>{% trans "No observations found" %}</h2>
     {% endif %}

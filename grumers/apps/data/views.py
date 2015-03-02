@@ -289,6 +289,10 @@ class JellyfishObservationList(BasePageView, SingleTableView):
                 data = data.filter(
                     observation_station__observation_route=
                     self.form.cleaned_data['route'])
+            if self.form.cleaned_data['route_type']:
+                data = data.filter(
+                    observation_station__observation_route__route_type=
+                    self.form.cleaned_data['route_type'])
             if self.form.cleaned_data['station']:
                 data = data.filter(
                     observation_station=self.form.cleaned_data['station'])
@@ -408,3 +412,86 @@ class JSONJellyfishSpecieList(BaseListView):
         return HttpResponse(content,
                             content_type='application/json',
                             **httpresponse_kwargs)
+
+
+class ObservationStationList(BasePageView, SingleTableView):
+    """List of observation stations
+    """
+
+    table_class = tables.ObservationStationTable
+    model = models.ObservationStation
+    table_pagination = {"per_page": 50}
+    export_format = None
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('data.can_list_jellyfishobservations'):
+            raise PermissionDenied()
+        pk_route = kwargs.get('pk_route', None)
+        if pk_route:
+            self.route = models.ObservationRoute.objects.get(pk=pk_route)
+            # Check if user is member of a group in route groups (if it has any)
+            if not request.user.is_superuser and self.route.groups and\
+               not (request.user.groups.all() & self.route.groups.all()):
+                raise PermissionDenied()
+        else:
+            self.route = None
+        self.form = forms.ObservationStationFilterForm(self.request.GET,
+                                                       user=request.user,
+                                                       route=self.route)
+        # Get export_type
+        if "export" in request.POST or "export" in request.GET:
+            self.export_format = 'xlsx'
+
+        return super(ObservationStationList, self).dispatch(request, *args, **kwargs)
+
+    def get_table(self, **kwargs):
+        if self.route:
+            kwargs['route'] = self.route.pk
+        return super(ObservationStationList, self).get_table(**kwargs)
+
+    def get_table_data(self):
+        data = models.ObservationStation.objects.all()
+        # Filter stations
+        if self.route:
+            data = data.filter(observation_route=self.route)
+
+        if self.form.is_valid():
+            if self.form.cleaned_data['route']:
+                data = data.filter(
+                    observation_route=self.form.cleaned_data['route'])
+            if self.form.cleaned_data['route_type']:
+                data = data.filter(
+                    observation_route__route_type=self.form.cleaned_data['route_type'])
+        return data
+
+    def get_context_data(self, **kwargs):
+        context = super(ObservationStationList, self).get_context_data(**kwargs)
+        context['form'] = self.form
+        context['route'] = self.route
+        return context
+
+    def export_data(self):
+        table = self.get_table()
+        return exporter.export_table(table, format=self.export_format)
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.export_format is not None:
+            return self.export_data()
+        return super(
+            ObservationStationList,
+            self).render_to_response(context, **response_kwargs)
+
+
+class ObservationStationMap(ObservationStationList):
+    """Show observations in a map, with filter.
+    """
+    template_name = 'data/observationstation_map.html'
+    table_class = tables.ObservationStationGeoTable
+
+    def get_table_data(self):
+        data = super(ObservationStationMap, self).get_table_data()
+        if self.export_format is not None:
+            return data
+        data = data.values('position')
+        return data

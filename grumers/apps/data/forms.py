@@ -1,4 +1,4 @@
- # coding: utf-8
+# coding: utf-8
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -207,6 +207,10 @@ class JellyfishObservationFilterForm(forms.Form):
         label=_('observation route'),
         empty_label=_('Route: all'),
         required=False)
+    route_type = forms.ChoiceField(
+        [('', _('Route type: all'))] + list(models.ObservationRoute.ROUTE_TYPE_CHOICES),
+        label=_('observation route type'),
+        required=False)
     station = forms.ModelChoiceField(
         models.ObservationStation.objects.filter(disabled=False),
         label=_('observation station'),
@@ -247,6 +251,49 @@ class JellyfishObservationFilterForm(forms.Form):
             qs = self.fields['station'].queryset
             self.fields['station'].queryset = qs.filter(observation_route=route)
             self.fields['route'].widget.attrs['readonly'] = True
+            self.fields['route_type'].widget.attrs['readonly'] = True
+
+        if not user.is_superuser:
+            self.fields['route'].queryset = models.ObservationRoute.objects.filter(
+                groups__in=user.groups.all())
+
+        for key in self.fields:
+            self.fields[key].label = self.fields[key].label.capitalize()
+
+
+class ObservationStationFilterForm(forms.Form):
+    route = forms.ModelChoiceField(
+        models.ObservationRoute.objects.filter(disabled=False),
+        label=_('observation route'),
+        empty_label=_('Route: all'),
+        required=False)
+    route_type = forms.ChoiceField(
+        [('', _('Route type: all'))] + list(models.ObservationRoute.ROUTE_TYPE_CHOICES),
+        label=_('observation route type'),
+        required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'GET'
+        filter_button = Submit(
+            'filter',
+            css_class='btn btn-default',
+            value=_('Filter'),
+            type='submit')
+        self.helper.add_input(filter_button)
+        export_button = Submit(
+            'export',
+            css_class='btn btn-info',
+            value=_('Export'),
+            type='submit')
+        self.helper.add_input(export_button)
+
+        user = kwargs.pop('user')
+        route = kwargs.pop('route')
+        super(ObservationStationFilterForm, self).__init__(*args, **kwargs)
+        if route:
+            self.fields['route'].widget.attrs['readonly'] = True
+            self.fields['route_type'].widget.attrs['readonly'] = True
 
         if not user.is_superuser:
             self.fields['route'].queryset = models.ObservationRoute.objects.filter(
