@@ -149,28 +149,44 @@ class ObservationRouteTable(tables.Table):
 
 class ObservationBeachTable(tables.Table):
     name = tables.TemplateColumn(
-        """<a href="{% url 'data_route_observation_list' record.pk %}">
-            {{ record.name }}
+        """{% load i18n %}{{ record.name }}
+            {%if record.use_incident_form %}
+            <a href="{% url 'data_route_dailyreport_list' record.pk %}" title="{% trans "Show observation list" %}">
+            {% else %}
+            <a href="{% url 'data_route_observation_list' record.pk %}" title="{% trans "Daily Report List" %}">
+            {% endif %}
+            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
             </a>
+            <a href="{% url 'data_route_flagchange_list' record.pk %}" title="{% trans "Flag Change List" %}"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></a>
         """)
     island = tables.Column()
     municipality = tables.Column()
     create_observation = tables.TemplateColumn(
         """{% load i18n %}
-           <a class="btn btn-primary"
+           {%if record.use_incident_form %}
+            <a class="btn btn-primary"
+            href="{% url 'data_route_dailyreport_create' record.pk %}">
+            <i class="glyphicon glyphicon-plus"></i>
+            {% trans 'Add' %} {% trans 'daily report' %}
+            </a>
+           {% else %}<a class="btn btn-primary"
             href="{% url 'data_route_observation_create' record.pk %}">
             <i class="glyphicon glyphicon-plus"></i>
             {% trans 'Add' %} {% trans 'observation' %}
-            </a>""",
-        verbose_name=_('create observation'))
-    create_bulk_observation = tables.TemplateColumn(
-        """{% load i18n %}
-           <a class="btn btn-warning"
+            </a>
+            <a class="btn btn-warning"
             href="{% url 'data_route_observation_bulkcreate' record.pk %}">
             <i class="glyphicon glyphicon-plus"></i>
             {% trans 'Add bulk no-observations' %}
-            </a>""",
-        verbose_name=_('create bulk no-observations'))
+            </a>{% endif %}
+            <a class="btn btn-info"
+            href="{% url 'data_route_flagchange_create' record.pk %}">
+            <i class="glyphicon glyphicon-plus"></i>
+            {% trans 'Add' %} {% trans 'flag change' %}
+            </a>
+
+            """,
+        verbose_name=_('actions'))
 
     class Meta:
         model = models.ObservationRoute
@@ -228,3 +244,127 @@ class ObservationStationGeoTable(tables.Table):
     class Meta:
         model = models.ObservationStation
         attrs = {"class": "table table-striped table-condensed"}
+
+
+class DailyReportTable(tables.Table):
+    date_observed = tables.TemplateColumn(
+        """<a href="{% url 'data_dailyreport_update' record.pk %}">
+            {{ record.date_observed|date:'d/m/Y'}}
+            </a>
+        """)
+    observation_station = tables.Column()
+    sting_incidents = tables.Column()
+    total_incidents = tables.Column()
+    source = tables.Column()
+    created_by = tables.Column()
+    route = None
+
+    def __init__(self, *args, **kwargs):
+        self.route = kwargs.pop('route', None)
+        super(DailyReportTable, self).__init__(*args, **kwargs)
+        if self.route:
+            self.context = Context({'route': self.route})
+            self.base_columns['date_observed'].template_code = """
+            <a href="{% url 'data_route_dailyreport_update' route.pk record.pk %}">
+            {{ record.date_observed|date:'d/m/Y'}}
+            </a>
+            """
+
+    class Meta:
+        model = models.DailyReport
+        attrs = {"class": "table table-striped table-condensed"}
+        sequence = fields = (
+            'date_observed',
+            'observation_station',
+            'sting_incidents',
+            'total_incidents',
+            'created_by',
+            'source',
+        )
+
+    @property
+    def verbose_name(self):
+        if getattr(self, 'display_name', None):
+            return self.display_name
+        return self.Meta.model._meta.verbose_name_plural.title()
+
+
+class DailyReportExportTable(DailyReportTable):
+    date_observed = tables.Column()
+    observation_route = tables.Column(
+        accessor='observation_station.observation_route.name')
+
+    def __init__(self, *args, **kwargs):
+        self.route = kwargs.pop('route', None)
+        super(DailyReportExportTable, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = models.DailyReport
+        fields = (
+            'date_observed',
+            'observation_station',
+            'created_by',
+            'source',
+            'sting_incidents',
+            'total_incidents'
+        )
+        sequence = (
+            'date_observed',
+            'observation_route',
+            'observation_station',
+            'sting_incidents',
+            'total_incidents',
+            'created_by',
+            'source',
+        )
+
+
+class FlagChangeTable(tables.Table):
+    date = tables.TemplateColumn(
+        """<a href="{% url 'data_flagchange_update' record.pk %}">
+            {{ record.date|date:'d/m/Y H:i'}}
+            </a>
+        """)
+    observation_station = tables.Column()
+    flag_status = tables.Column()
+    jellyfish_flag = tables.Column()
+    created_by = tables.Column()
+    route = None
+
+    def __init__(self, *args, **kwargs):
+        self.route = kwargs.pop('route', None)
+        super(FlagChangeTable, self).__init__(*args, **kwargs)
+        if self.route:
+            self.context = Context({'route': self.route})
+            self.base_columns['date'].template_code = """
+            <a href="{% url 'data_route_flagchange_update' route.pk record.pk %}">
+            {{ record.date|date:'d/m/Y H:i'}}
+            </a>
+            """
+
+    class Meta:
+        model = models.FlagChange
+        attrs = {"class": "table table-striped table-condensed"}
+        sequence = fields = (
+            'date',
+            'observation_station',
+            'flag_status',
+            'jellyfish_flag',
+            'created_by',
+        )
+
+    @property
+    def verbose_name(self):
+        if getattr(self, 'display_name', None):
+            return self.display_name
+        return self.Meta.model._meta.verbose_name_plural.title()
+
+
+class FlagChangeExportTable(FlagChangeTable):
+    date = tables.Column()
+    observation_route = tables.Column(
+        accessor='observation_station.observation_route.name')
+
+    def __init__(self, *args, **kwargs):
+        self.route = kwargs.pop('route', None)
+        super(FlagChangeExportTable, self).__init__(*args, **kwargs)

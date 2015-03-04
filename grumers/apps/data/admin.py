@@ -24,6 +24,8 @@ class JellyfishSpeciesAdmin(AuditModelAdmin):
 class ObservationRouteAdmin(AuditModelAdmin):
     list_display = ('name', 'group_list', 'active',)
     filter_horizontal = ('groups',)
+    list_filter = ['route_type', 'island', 'municipality']
+    search_fields = ['name']
 
     def save_model(self, request, obj, form, change):
         if form.cleaned_data['route_type'] == 'B' and not form.cleaned_data['groups']:
@@ -61,7 +63,14 @@ class JellyfishObservationAdmin(AuditModelAdmin):
             choices=models.JellyfishObservation.QUANTITY_CHOICES)
         return form
 
+
+class DailyReportAdmin(AuditModelAdmin):
+    list_display = ('date_observed', 'sting_incidents', 'total_incidents', 'created_by')
+    list_filter = ['observation_station', 'created_by', 'date_observed']
+
+
 admin.site.register(models.JellyfishSpecie, JellyfishSpeciesAdmin)
 admin.site.register(models.ObservationRoute, ObservationRouteAdmin)
 admin.site.register(models.ObservationStation, ObservationStationAdmin)
 admin.site.register(models.JellyfishObservation, JellyfishObservationAdmin)
+admin.site.register(models.DailyReport, DailyReportAdmin)

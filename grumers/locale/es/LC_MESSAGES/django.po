@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-30 14:02+0200\n"
-"PO-Revision-Date: 2014-05-30 14:09+0100\n"
+"POT-Creation-Date: 2015-03-04 14:40+0100\n"
+"PO-Revision-Date: 2015-03-04 15:05+0100\n"
 "Last-Translator: Biel Frontera <bfrontera@socib.es>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
 
-#: apps/data/forms.py:16
+#: apps/data/forms.py:16 apps/data/forms.py:312 apps/data/forms.py:407
 msgid "Update"
 msgstr "Actualiza"
 
@@ -29,44 +29,43 @@ msgstr "Informa la especie de medusa o deja la cantidad a cero"
 msgid "Fill quantity or set specie to none"
 msgstr "Indica la cantidad o deja en blanco la especie"
 
-#: apps/data/forms.py:49
+#: apps/data/forms.py:48 apps/data/forms.py:327
 msgid "Sting incidents can not be greater than total incidents"
 msgstr "El número de picaduras no puede ser mayor que el total de incidencias"
 
-#: apps/data/forms.py:63
+#: apps/data/forms.py:62
 #, python-format
 msgid "%s observation"
 msgstr "%s observación"
 
-#: apps/data/forms.py:69
+#: apps/data/forms.py:68
 #, python-format
 msgid "%s Create observation and continue with next station"
 msgstr "%s Guarda y pasa al siguiente punto"
 
-#: apps/data/forms.py:76
-#: apps/data/forms.py:169
+#: apps/data/forms.py:75 apps/data/forms.py:169 apps/data/forms.py:355
+#: apps/data/forms.py:448
 msgid "Cancel"
 msgstr "Cancela"
 
-#: apps/data/forms.py:88
+#: apps/data/forms.py:87 apps/data/forms.py:367 apps/data/forms.py:462
 msgid "When / Where"
 msgstr "Cuándo / Dónde"
 
-#: apps/data/forms.py:93
+#: apps/data/forms.py:92
 msgid "Jellyfish observation"
 msgstr "Observación de medusas"
 
-#: apps/data/forms.py:100
+#: apps/data/forms.py:99 apps/data/forms.py:372
 msgid "Incidents during the day"
 msgstr "Incidencias al largo del día"
 
-#: apps/data/forms.py:118
-#: apps/data/models.py:199
-#: apps/data/models.py:249
+#: apps/data/forms.py:117 apps/data/models.py:215 apps/data/models.py:265
+#: apps/data/models.py:335
 msgid "None"
 msgstr "Ninguna"
 
-#: apps/data/forms.py:147
+#: apps/data/forms.py:147 apps/data/forms.py:400 apps/data/forms.py:502
 msgid "Create"
 msgstr "Crea"
 
@@ -86,11 +85,9 @@ msgstr "especie"
 msgid "Specie: all"
 msgstr "Especie: todas"
 
-#: apps/data/forms.py:201
-#: apps/data/models.py:34
-#: apps/data/models.py:111
-#: apps/data/models.py:157
-#: apps/data/models.py:231
+#: apps/data/forms.py:201 apps/data/models.py:35 apps/data/models.py:118
+#: apps/data/models.py:169 apps/data/models.py:247 apps/data/models.py:352
+#: apps/data/models.py:400
 msgid "created by"
 msgstr "creado por"
 
@@ -98,42 +95,96 @@ msgstr "creado por"
 msgid "User: all"
 msgstr "Usuario: todos"
 
-#: apps/data/forms.py:206
-#: apps/data/models.py:118
-#: apps/data/models.py:147
+#: apps/data/forms.py:206 apps/data/forms.py:272 apps/data/models.py:125
+#: apps/data/models.py:158
 msgid "observation route"
 msgstr "ruta de observación"
 
-#: apps/data/forms.py:207
+#: apps/data/forms.py:207 apps/data/forms.py:273
 msgid "Route: all"
 msgstr "Ruta: todas"
 
-#: apps/data/forms.py:211
-#: apps/data/models.py:166
-#: apps/data/models.py:209
+#: apps/data/forms.py:210 apps/data/forms.py:276
+msgid "Route type: all"
+msgstr "Tipo de ruta: todas"
+
+#: apps/data/forms.py:211 apps/data/forms.py:277
+msgid "observation route type"
+msgstr "tipo de ruta de observación"
+
+#: apps/data/forms.py:215 apps/data/models.py:178 apps/data/models.py:225
+#: apps/data/models.py:343 apps/data/models.py:386
 msgid "observation station"
 msgstr "punto de observación"
 
-#: apps/data/forms.py:212
+#: apps/data/forms.py:216
 msgid "Station: all"
 msgstr "Puntos: todos"
 
-#: apps/data/forms.py:215
-#: apps/data/models.py:217
+#: apps/data/forms.py:219 apps/data/models.py:233 apps/data/models.py:387
 msgid "source"
 msgstr "fuente"
 
-#: apps/data/forms.py:216
+#: apps/data/forms.py:220
 msgid "from date"
 msgstr "desde fecha"
 
-#: apps/data/forms.py:224
+#: apps/data/forms.py:221
+msgid "to date"
+msgstr "hasta fecha"
+
+#: apps/data/forms.py:229 apps/data/forms.py:286 apps/data/forms.py:535
 msgid "Filter"
 msgstr "Filtra"
 
-#: apps/data/forms.py:230
+#: apps/data/forms.py:235 apps/data/forms.py:292
 msgid "Export"
 msgstr "Exporta"
+
+#: apps/data/forms.py:342
+#, python-format
+msgid "%s daily report"
+msgstr "%s informe diario"
+
+#: apps/data/forms.py:348
+#, python-format
+msgid "%s Create report and continue with next station"
+msgstr "%s Guarda el informe y pasa al siguiente punto"
+
+#: apps/data/forms.py:425
+#, python-format
+msgid "%s flag change"
+msgstr "%s cambio de bandera"
+
+#: apps/data/forms.py:431
+#, python-format
+msgid "%s Create flag change and continue"
+msgstr "%s Crea el cambio de bandera y continúa"
+
+#: apps/data/forms.py:467 templates/data/dailyreport_update.html:31
+#: templates/data/flagchange_update.html:31
+msgid "Flag"
+msgstr "Bandera"
+
+#: apps/data/forms.py:511 apps/data/forms.py:525
+msgid "Municipality: all"
+msgstr "Municipio: todos"
+
+#: apps/data/forms.py:516
+msgid "Name"
+msgstr "Nombre"
+
+#: apps/data/forms.py:520
+msgid "Island: all"
+msgstr "Isla: todas"
+
+#: apps/data/forms.py:521
+msgid "Island"
+msgstr "Isla"
+
+#: apps/data/forms.py:526
+msgid "Municipality"
+msgstr "Municipio"
 
 #: apps/data/models.py:21
 msgid "scientific name"
@@ -147,13 +198,11 @@ msgstr "nombre común"
 msgid "slug"
 msgstr "slug"
 
-#: apps/data/models.py:25
-#: apps/data/models.py:96
+#: apps/data/models.py:25 apps/data/models.py:101
 msgid "description"
 msgstr "descripción"
 
-#: apps/data/models.py:26
-#: apps/data/models.py:214
+#: apps/data/models.py:26 apps/data/models.py:230
 msgid "picture"
 msgstr "fotografía"
 
@@ -161,219 +210,280 @@ msgstr "fotografía"
 msgid "display order"
 msgstr "Orden visualización"
 
-#: apps/data/models.py:31
-#: apps/data/models.py:108
-#: apps/data/models.py:154
-#: apps/data/models.py:228
+#: apps/data/models.py:30 apps/data/models.py:113 apps/data/models.py:164
+msgid "disabled"
+msgstr "deshabilitado"
+
+#: apps/data/models.py:32 apps/data/models.py:115 apps/data/models.py:166
+#: apps/data/models.py:244 apps/data/models.py:349 apps/data/models.py:397
 msgid "date added"
 msgstr "fecha alta"
 
-#: apps/data/models.py:35
-#: apps/data/models.py:112
-#: apps/data/models.py:158
-#: apps/data/models.py:232
+#: apps/data/models.py:36 apps/data/models.py:119 apps/data/models.py:170
+#: apps/data/models.py:248 apps/data/models.py:353 apps/data/models.py:401
 msgid "date modified"
 msgstr "fecha modificación"
 
-#: apps/data/models.py:38
-#: apps/data/models.py:115
-#: apps/data/models.py:161
-#: apps/data/models.py:235
+#: apps/data/models.py:39 apps/data/models.py:122 apps/data/models.py:173
+#: apps/data/models.py:251 apps/data/models.py:356 apps/data/models.py:404
 msgid "update by"
 msgstr "actualizado por"
 
-#: apps/data/models.py:41
-#: apps/data/models.py:212
+#: apps/data/models.py:42 apps/data/models.py:228
 msgid "jellyfish specie"
 msgstr "especie de medusa"
 
-#: apps/data/models.py:42
-#: templates/_header_nav.html:38
+#: apps/data/models.py:43 templates/_header_nav.html:38
 msgid "jellyfish species"
 msgstr "especies de medusa"
 
-#: apps/data/models.py:79
+#: apps/data/models.py:84
 msgid "Mallorca"
-msgstr ""
+msgstr "Mallorca"
 
-#: apps/data/models.py:80
+#: apps/data/models.py:85
 msgid "Menorca"
-msgstr ""
+msgstr "Menorca"
 
-#: apps/data/models.py:81
+#: apps/data/models.py:86
 msgid "Eivissa"
-msgstr ""
+msgstr "Eivissa"
 
-#: apps/data/models.py:82
+#: apps/data/models.py:87
 msgid "Formentera"
-msgstr ""
+msgstr "Formentera"
 
-#: apps/data/models.py:88
+#: apps/data/models.py:93
 msgid "Marine reserve"
 msgstr "Reserva marina"
 
-#: apps/data/models.py:89
+#: apps/data/models.py:94
 msgid "Cleaning route"
 msgstr "Ruta de limpieza"
 
-#: apps/data/models.py:90
+#: apps/data/models.py:95
 msgid "Beach watching"
 msgstr "Vigilancia playa"
 
-#: apps/data/models.py:93
-#: apps/data/models.py:145
+#: apps/data/models.py:98 apps/data/models.py:156
 msgid "name"
 msgstr "nombre"
 
-#: apps/data/models.py:94
+#: apps/data/models.py:99
 msgid "code"
 msgstr "código"
 
-#: apps/data/models.py:97
-#: apps/data/models.py:150
+#: apps/data/models.py:102 apps/data/models.py:161
 msgid "type"
 msgstr "tipo"
 
-#: apps/data/models.py:100
+#: apps/data/models.py:105
+msgid "use incident form"
+msgstr "utiliza el formulario de incidencias diarias"
+
+#: apps/data/models.py:106
 msgid "island"
 msgstr "isla"
 
-#: apps/data/models.py:103
+#: apps/data/models.py:109
 msgid "municipality"
 msgstr "municipio"
 
-#: apps/data/models.py:105
-#: apps/web/models.py:17
+#: apps/data/models.py:111 apps/web/models.py:17
 msgid "user groups allowed"
 msgstr "grupos permitidos"
 
-#: apps/data/models.py:119
-#: templates/_header_nav.html:39
+#: apps/data/models.py:126 templates/_header_nav.html:39
 msgid "observation routes"
 msgstr "rutas de observación"
 
-#: apps/data/models.py:139
+#: apps/data/models.py:150
 msgid "High sea"
 msgstr "En el mar"
 
-#: apps/data/models.py:140
+#: apps/data/models.py:151
 msgid "Offshore - 200 m"
 msgstr "Lejos de la costa - 200m"
 
-#: apps/data/models.py:141
+#: apps/data/models.py:152
 msgid "Nearshore - 100 m"
 msgstr "Cerca de la costa - 100m"
 
-#: apps/data/models.py:142
+#: apps/data/models.py:153
 msgid "Beach shore"
 msgstr "Orilla (Playa)"
 
-#: apps/data/models.py:148
+#: apps/data/models.py:159
 msgid "order in route"
 msgstr "orden en la ruta"
 
-#: apps/data/models.py:149
+#: apps/data/models.py:160
 msgid "position"
 msgstr "posición"
 
-#: apps/data/models.py:167
-#: templates/_header_nav.html:40
+#: apps/data/models.py:179 templates/_header_nav.html:40
 msgid "observation stations"
 msgstr "punto de observación"
 
-#: apps/data/models.py:192
+#: apps/data/models.py:208 apps/data/models.py:379
 msgid "Web Form"
 msgstr "Formulario web"
 
-#: apps/data/models.py:193
+#: apps/data/models.py:209
 msgid "Web Form (Bulk)"
 msgstr "Formulario web (masiva)"
 
-#: apps/data/models.py:194
+#: apps/data/models.py:210 apps/data/models.py:380
 msgid "API"
 msgstr "API"
 
-#: apps/data/models.py:195
+#: apps/data/models.py:211 apps/data/models.py:381
 msgid "Bulk upload"
 msgstr "importación masiva"
 
-#: apps/data/models.py:200
+#: apps/data/models.py:216
 msgid "One"
 msgstr "Una"
 
-#: apps/data/models.py:201
+#: apps/data/models.py:217
 msgid "2 to 5"
 msgstr "2 hasta 5"
 
-#: apps/data/models.py:202
+#: apps/data/models.py:218
 msgid "6 to 10"
 msgstr "6 hasta 10"
 
-#: apps/data/models.py:203
+#: apps/data/models.py:219
 msgid "11 to 99"
 msgstr "11 hasta 99"
 
-#: apps/data/models.py:204
+#: apps/data/models.py:220
 msgid "100 or more"
 msgstr "100 o más"
 
-#: apps/data/models.py:207
+#: apps/data/models.py:223
 msgid "observation date and time"
 msgstr "fecha y hora observación"
 
-#: apps/data/models.py:213
+#: apps/data/models.py:229
 msgid "quantity observed"
 msgstr "cantidad observada"
 
-#: apps/data/models.py:220
+#: apps/data/models.py:236
 msgid "remarks"
 msgstr "comentarios"
 
-#: apps/data/models.py:222
+#: apps/data/models.py:238 apps/data/models.py:391
 msgid "total sting incidents"
 msgstr "picaduras totales"
 
-#: apps/data/models.py:225
+#: apps/data/models.py:241 apps/data/models.py:394
 msgid "total incidents"
 msgstr "incidentes totales"
 
-#: apps/data/models.py:238
+#: apps/data/models.py:254
 msgid "jellyfish observation"
 msgstr "observación de medusas"
 
-#: apps/data/models.py:239
+#: apps/data/models.py:255
 msgid "jellyfish observations"
 msgstr "observaciones de medusas"
 
+#: apps/data/models.py:336
+msgid "Red"
+msgstr "Roja"
+
+#: apps/data/models.py:337
+msgid "Yellow"
+msgstr "Amarilla"
+
+#: apps/data/models.py:338
+msgid "Green"
+msgstr "Verde"
+
+#: apps/data/models.py:341
+msgid "date and time"
+msgstr "fecha y hora"
+
+#: apps/data/models.py:344
+msgid "flag status"
+msgstr "estado de la bandera"
+
+#: apps/data/models.py:347
+msgid "jellyfish flag"
+msgstr "bandera de medusas"
+
+#: apps/data/models.py:359 templates/data/dailyreport_update.html:41
+#: templates/data/flagchange_list.html:26
+#: templates/data/flagchange_list.html:28
+msgid "flag change"
+msgstr "cambio de bandera"
+
+#: apps/data/models.py:360
+msgid "flag changes"
+msgstr "cambios de bandera"
+
+#: apps/data/models.py:384
+msgid "date"
+msgstr "fecha"
+
+#: apps/data/models.py:407 apps/data/models.py:408
+#: templates/data/dailyreport_list.html:26
+#: templates/data/dailyreport_list.html:28
+msgid "daily report"
+msgstr "informe diario"
+
 #: apps/data/tables.py:132
-#: apps/data/tables.py:165
 msgid "create observation"
 msgstr "Crea observación"
 
 #: apps/data/tables.py:140
-#: apps/data/tables.py:173
 msgid "create bulk no-observations"
 msgstr "Crea no-observaciones masivas"
+
+#: apps/data/tables.py:187
+msgid "actions"
+msgstr "acciones"
 
 #: apps/data/views.py:101
 msgid "Observation created"
 msgstr "Observación creada"
 
-#: apps/data/views.py:138
+#: apps/data/views.py:139
 msgid "Observation updated"
 msgstr "Observaciçon actualizada"
 
-#: apps/data/views.py:159
+#: apps/data/views.py:160
 msgid "Route reference missed"
 msgstr "Referencia de la ruta no encontrada"
 
-#: apps/data/views.py:205
+#: apps/data/views.py:206
 msgid "Observations created"
 msgstr "Observaciones creadas"
 
-#: apps/data/views.py:230
+#: apps/data/views.py:231
 msgid "Observation deleted"
 msgstr "Observación borrada"
+
+#: apps/data/views.py:598
+msgid "Daily report created"
+msgstr "Informe diario creado"
+
+#: apps/data/views.py:635
+msgid "Daily report updated"
+msgstr "Informe diario actualizado"
+
+#: apps/data/views.py:838
+msgid "Flag change created"
+msgstr "Cambio de bandera creado"
+
+#: apps/data/views.py:867
+msgid "Flag Change updated"
+msgstr "Cambio de bandera actualizado"
+
+#: apps/data/views.py:884
+msgid "Flag change deleted"
+msgstr "Cambio de bandera eliminado"
 
 #: apps/web/forms.py:10
 msgid "first name"
@@ -444,7 +554,7 @@ msgstr "la página es un contenedor"
 msgid "Page not found"
 msgstr "Página no encontrada"
 
-#: apps/web/views.py:100
+#: apps/web/views.py:106
 msgid "Profile updated"
 msgstr "Perfil actualizado"
 
@@ -488,8 +598,7 @@ msgstr "Modifica el perfil"
 msgid "Logout"
 msgstr "Salir"
 
-#: templates/_header_nav.html:59
-#: templates/registration/login.html:9
+#: templates/_header_nav.html:59 templates/registration/login.html:9
 #: templates/registration/login.html:39
 msgid "Login"
 msgstr "Identificación"
@@ -497,6 +606,95 @@ msgstr "Identificación"
 #: templates/_header_nav.html:63
 msgid "Change language"
 msgstr "Cambiar idioma"
+
+#: templates/data/dailyreport_create.html:5
+#: templates/data/dailyreport_create.html:8
+msgid "Create Daily Report"
+msgstr "Crea informe diario"
+
+#: templates/data/dailyreport_list.html:6
+#: templates/data/dailyreport_list.html:9
+msgid "Daily Report List"
+msgstr "Lista de informes diarios"
+
+#: templates/data/dailyreport_list.html:23
+msgid "No reports found"
+msgstr "No se ha encontrado ningún informe diario"
+
+#: templates/data/dailyreport_list.html:26
+#: templates/data/dailyreport_list.html:28
+#: templates/data/dailyreport_update.html:41
+#: templates/data/flagchange_list.html:26
+#: templates/data/flagchange_list.html:28
+#: templates/data/jellyfishobservation_list.html:28
+#: templates/data/jellyfishobservation_list.html:31
+msgid "Add"
+msgstr "Nueva"
+
+#: templates/data/dailyreport_update.html:8
+#: templates/data/dailyreport_update.html:11
+msgid "Update Daily Report"
+msgstr "Actualiza el informe diario"
+
+#: templates/data/dailyreport_update.html:23
+#: templates/data/flagchange_update.html:23
+#: templates/data/jellyfishobservation_update.html:23
+msgid "Map"
+msgstr "Mapa"
+
+#: templates/data/dailyreport_update.html:29
+msgid "Flag changes"
+msgstr "Cambios de bandera"
+
+#: templates/data/dailyreport_update.html:31
+#: templates/data/flagchange_update.html:31
+msgid "Date"
+msgstr "Fecha"
+
+#: templates/data/dailyreport_update.html:31
+#: templates/data/flagchange_update.html:31
+msgid "Station"
+msgstr "Punto"
+
+#: templates/data/dailyreport_update.html:31
+#: templates/data/flagchange_update.html:31
+msgid "Jellyfish flag"
+msgstr "Bandera de medusas"
+
+#: templates/data/flagchange_create.html:5
+#: templates/data/flagchange_create.html:8
+msgid "Create Flag Change"
+msgstr "Crea cambio de bandera"
+
+#: templates/data/flagchange_delete.html:4
+#: templates/data/flagchange_delete.html:7
+msgid "Delete Flag Change"
+msgstr "Elimina el cambio de bandera"
+
+#: templates/data/flagchange_delete.html:16
+msgid "Are you sure you want to delete this record?"
+msgstr "¿Está seguro que quiere borrar este registro?"
+
+#: templates/data/flagchange_delete.html:17
+msgid "Yes, I'm Sure"
+msgstr "Sí, lo estoy"
+
+#: templates/data/flagchange_list.html:6 templates/data/flagchange_list.html:9
+msgid "Flag Change List"
+msgstr "Lista de cambios de bandera"
+
+#: templates/data/flagchange_list.html:23
+msgid "No flag changes found"
+msgstr "No se han encontrado cambios de bandera"
+
+#: templates/data/flagchange_update.html:8
+#: templates/data/flagchange_update.html:11
+msgid "Update Flag Change"
+msgstr "Actualiza el cambio de bandera"
+
+#: templates/data/flagchange_update.html:29
+msgid "Latest flag changes"
+msgstr "Últimos cambios de bandera"
 
 #: templates/data/jellyfishobservation_bulkcreate.html:6
 #: templates/data/jellyfishobservation_bulkcreate.html:9
@@ -541,11 +739,6 @@ msgstr "Muestra el mapa de calor"
 
 #: templates/data/jellyfishobservation_list.html:28
 #: templates/data/jellyfishobservation_list.html:31
-msgid "Add"
-msgstr "Nueva"
-
-#: templates/data/jellyfishobservation_list.html:28
-#: templates/data/jellyfishobservation_list.html:31
 msgid "observation"
 msgstr "observación"
 
@@ -563,10 +756,6 @@ msgstr "Mapa de las observaciones"
 msgid "Update Observation"
 msgstr "Actualiza"
 
-#: templates/data/jellyfishobservation_update.html:23
-msgid "Map"
-msgstr "Mapa"
-
 #: templates/data/jellyfishobservation_update.html:27
 msgid "Picture"
 msgstr "Fotografía"
@@ -580,6 +769,29 @@ msgstr "Lista de playas"
 #: templates/data/observationroute_list.html:9
 msgid "Route List"
 msgstr "Lista de rutas"
+
+#: templates/data/observationstation_list.html:6
+#: templates/data/observationstation_list.html:9
+msgid "Observation Station List"
+msgstr "Lista de puntos de observación"
+
+#: templates/data/observationstation_list.html:19
+msgid "Show observation station map"
+msgstr "Muestra el mapa de puntos de observación"
+
+#: templates/data/observationstation_list.html:24
+#: templates/data/observationstation_map.html:25
+msgid "No stations found"
+msgstr "No se ha encontrado ningún punto de observación"
+
+#: templates/data/observationstation_map.html:7
+#: templates/data/observationstation_map.html:10
+msgid "Observation Station Map"
+msgstr "Mapa de puntos de observación"
+
+#: templates/data/observationstation_map.html:20
+msgid "Show observation station list"
+msgstr "Muesta la lista de puntos de observación"
 
 #: templates/password_reset/recovery_form.html:4
 msgid "Password recovery"
@@ -596,8 +808,12 @@ msgstr "Nueva contraseña"
 
 #: templates/password_reset/reset.html:8
 #, python-format
-msgid "Sorry, this password reset link is invalid. You can still <a href=\"%(recovery_url)s\">request a new one</a>."
-msgstr "El enlace para recuperar la contraseña es inválido.  Puedes solicitar un <a href=\"%(recovery_url)s\">nuevo enlace para recuperar la contraseña</a>."
+msgid ""
+"Sorry, this password reset link is invalid. You can still <a href="
+"\"%(recovery_url)s\">request a new one</a>."
+msgstr ""
+"El enlace para recuperar la contraseña es inválido.  Puedes solicitar un <a "
+"href=\"%(recovery_url)s\">nuevo enlace para recuperar la contraseña</a>."
 
 #: templates/password_reset/reset.html:12
 #, python-format
@@ -614,7 +830,9 @@ msgstr "Bienvenido/a a la aplicación de observación de medusas"
 
 #: templates/registration/login.html:13
 msgid "Your username and password did not match. Please try again."
-msgstr "El usuario y contraseña no son correctos. Prueba otra vez o contacta con el administrador de la aplicación"
+msgstr ""
+"El usuario y contraseña no son correctos. Prueba otra vez o contacta con el "
+"administrador de la aplicación"
 
 #: templates/web/home.html:5
 msgid "Home"

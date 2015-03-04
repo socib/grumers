@@ -1,0 +1,12 @@
+{% extends "data/dailyreport_update.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title_head %}{{ block.super }}: {% trans "Create Daily Report" %}{% endblock %}
+
+{% block title %}
+{% trans "Create Daily Report" %}
+{% if route %}
+  <span class="route">{{ route.name }}</span>
+{% endif %}
+{% endblock %}

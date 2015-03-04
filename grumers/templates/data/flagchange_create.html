@@ -1,0 +1,12 @@
+{% extends "data/flagchange_update.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title_head %}{{ block.super }}: {% trans "Create Flag Change" %}{% endblock %}
+
+{% block title %}
+{% trans "Create Flag Change" %}
+{% if route %}
+  <span class="route">{{ route.name }}</span>
+{% endif %}
+{% endblock %}

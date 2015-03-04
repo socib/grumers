@@ -3,7 +3,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Fieldset, ButtonHolder
+from crispy_forms.layout import Submit, Fieldset, ButtonHolder, Field, Div, HTML
 from crispy_forms.bootstrap import StrictButton
 from bootstrap3_datetime.widgets import DateTimePicker
 from grumers.utils.crispy import ExtendedLayout
@@ -43,14 +43,13 @@ class JellyfishObservationUpdateForm(forms.ModelForm):
             self._errors["jellyfish_specie"] = self.error_class([msg])
             del cleaned_data["quantity"]
             del cleaned_data["jellyfish_specie"]
-
-        if ['sting_incidents', 'total_incidents'] in cleaned_data.keys():
+        if 'sting_incidents' in cleaned_data.keys() and 'total_incidents' in cleaned_data.keys():
             if cleaned_data['sting_incidents'] > cleaned_data['total_incidents']:
                 msg = _('Sting incidents can not be greater than total incidents')
                 self._errors["sting_incidents"] = self.error_class([msg])
-                self._errors["jellyfish_specie"] = self.error_class([msg])
+                self._errors["total_incidents"] = self.error_class([msg])
                 del cleaned_data["total_incidents"]
-                del cleaned_data["total_incidents"]
+                del cleaned_data["sting_incidents"]
         return cleaned_data
 
     def __init__(self, *args, **kwargs):
@@ -261,6 +260,12 @@ class JellyfishObservationFilterForm(forms.Form):
             self.fields[key].label = self.fields[key].label.capitalize()
 
 
+class DailyReportFilterForm(JellyfishObservationFilterForm):
+    def __init__(self, *args, **kwargs):
+        super(DailyReportFilterForm, self).__init__(*args, **kwargs)
+        self.fields.pop('jellyfish_specie')
+
+
 class ObservationStationFilterForm(forms.Form):
     route = forms.ModelChoiceField(
         models.ObservationRoute.objects.filter(disabled=False),
@@ -298,6 +303,247 @@ class ObservationStationFilterForm(forms.Form):
         if not user.is_superuser:
             self.fields['route'].queryset = models.ObservationRoute.objects.filter(
                 groups__in=user.groups.all())
+
+        for key in self.fields:
+            self.fields[key].label = self.fields[key].label.capitalize()
+
+
+class DailyReportUpdateForm(forms.ModelForm):
+    button_prefix = _("Update")
+
+    class Meta:
+        model = models.DailyReport
+        fields = [
+            'date_observed',
+            'observation_station',
+            'sting_incidents',
+            'total_incidents',
+        ]
+
+    def clean(self):
+        cleaned_data = super(DailyReportUpdateForm, self).clean()
+        if 'sting_incidents' in cleaned_data.keys() and 'total_incidents' in cleaned_data.keys():
+            if cleaned_data['sting_incidents'] > cleaned_data['total_incidents']:
+                msg = _('Sting incidents can not be greater than total incidents')
+                self._errors["sting_incidents"] = self.error_class([msg])
+                self._errors["total_incidents"] = self.error_class([msg])
+                del cleaned_data["sting_incidents"]
+                del cleaned_data["total_incidents"]
+
+        return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-sm-3'
+        self.helper.field_class = 'col-sm-5'
+        submit_button = StrictButton(
+            '<span class="glyphicon glyphicon-save"></span> ' +
+            _('%s daily report') % self.button_prefix,
+            css_class='btn btn-primary',
+            name='dailyreport',
+            value='submit_dailyreport',
+            type='submit')
+        next_station_button = StrictButton(
+            _('%s Create report and continue with next station') %
+            '<span class="glyphicon glyphicon-arrow-right"></span>',
+            css_class='btn btn-primary',
+            name='next_station',
+            value='submit_next_station',
+            type='submit')
+        cancel_button = StrictButton(
+            _('Cancel'),
+            css_class='btn',
+            name='cancel',
+            value='cancel',
+            type='submit')
+
+        if not isinstance(self, DailyReportCreateForm):
+            next_station_button = None
+
+        self.helper.add_layout(
+            ExtendedLayout(
+                Fieldset(
+                    _('When / Where'),
+                    'date_observed',
+                    'observation_station',
+                ),
+                Fieldset(
+                    _('Incidents during the day'),
+                    'sting_incidents',
+                    'total_incidents',
+                    css_class='incidents'
+                ),
+                ButtonHolder(
+                    next_station_button,
+                    submit_button,
+                    cancel_button,
+                ),
+            )
+        )
+
+        station = kwargs.pop('station', None)
+        route = kwargs.pop('route', None)
+        super(DailyReportUpdateForm, self).__init__(*args, **kwargs)
+        if station:
+            self.fields['observation_station'].initial = station
+
+        station_queryset = self.fields['observation_station'].queryset
+        if route:
+            station_queryset = station_queryset.filter(observation_route=route)
+        station_queryset = station_queryset.filter(disabled=False)
+        self.fields['observation_station'].queryset = station_queryset
+
+
+class DailyReportCreateForm(DailyReportUpdateForm):
+
+    button_prefix = _("Create")
+
+    def __init__(self, *args, **kwargs):
+        super(DailyReportCreateForm, self).__init__(*args, **kwargs)
+
+
+class FlagChangeUpdateForm(forms.ModelForm):
+    button_prefix = _("Update")
+
+    class Meta:
+        model = models.FlagChange
+        fields = [
+            'date',
+            'observation_station',
+            'flag_status',
+            'jellyfish_flag'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-sm-3'
+        self.helper.field_class = 'col-sm-5'
+        submit_button = StrictButton(
+            '<span class="glyphicon glyphicon-save"></span> ' +
+            _('%s flag change') % self.button_prefix,
+            css_class='btn btn-primary',
+            name='flagchange',
+            value='submit_flagchange',
+            type='submit')
+        next_station_button = StrictButton(
+            _('%s Create flag change and continue') %
+            '<span class="glyphicon glyphicon-arrow-right"></span>',
+            css_class='btn btn-primary',
+            name='continue',
+            value='submit_continue',
+            type='submit')
+        delete_button = HTML("""
+            {% load i18n %}
+            {% if object.pk %}
+            <a class="btn btn-danger" style="margin-right: 5px;"
+            href="{% if route %}{% url 'data_route_flagchange_delete' route.pk object.pk %}{% else %}{% url 'data_flagchange_delete' object.pk %}{% endif %}">
+            <i class="glyphicon glyphicon-remove"></i>
+            {% trans 'Remove' %}</a>
+            {% endif %}
+            </a>
+            """)
+        cancel_button = StrictButton(
+            _('Cancel'),
+            css_class='btn',
+            name='cancel',
+            value='cancel',
+            type='submit')
+
+        if not isinstance(self, FlagChangeCreateForm):
+            next_station_button = None
+        else:
+            submit_button = None
+
+        self.helper.add_layout(
+            ExtendedLayout(
+                Fieldset(
+                    _('When / Where'),
+                    'date',
+                    'observation_station',
+                ),
+                Fieldset(
+                    _('Flag'),
+                    'flag_status',
+                    Div(
+                        Field('jellyfish_flag'),
+                        css_class="col-sm-offset-3"),
+                    css_class='flags'
+                ),
+                ButtonHolder(
+                    next_station_button,
+                    submit_button,
+                    delete_button,
+                    cancel_button,
+                ),
+            )
+        )
+
+        station = kwargs.pop('station', None)
+        route = kwargs.pop('route', None)
+        super(FlagChangeUpdateForm, self).__init__(*args, **kwargs)
+        if station:
+            self.fields['observation_station'].initial = station
+
+        station_queryset = self.fields['observation_station'].queryset
+        if route:
+            station_queryset = station_queryset.filter(observation_route=route)
+        station_queryset = station_queryset.filter(station_type='B')
+        station_queryset = station_queryset.filter(disabled=False)
+        self.fields['observation_station'].queryset = station_queryset
+        self.fields['date'].widget = DateTimePicker(
+            options={"format": "YYYY-MM-DD HH:mm",
+                     "pickSeconds": False})
+
+
+class FlagChangeCreateForm(FlagChangeUpdateForm):
+
+    button_prefix = _("Create")
+
+    def __init__(self, *args, **kwargs):
+        super(FlagChangeCreateForm, self).__init__(*args, **kwargs)
+
+
+def get_municipality_choices():
+    municipalities = models.ObservationRoute.objects.all().order_by(
+        'municipality').values_list('municipality').distinct()
+    return [('', _('Municipality: all'))] + [(mun[0], mun[0]) for mun in municipalities]
+
+
+class ObservationBeachFilterForm(forms.Form):
+    name = forms.CharField(
+        label=_('Name'),
+        required=False)
+
+    island = forms.ChoiceField(
+        [('', _('Island: all'))] + list(models.ISLAND_CHOICES),
+        label=_('Island'),
+        required=False)
+
+    municipality = forms.ChoiceField(
+        [('', _('Municipality: all'))],
+        label=_('Municipality'),
+        required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'GET'
+        filter_button = Submit(
+            'filter',
+            css_class='btn btn-default',
+            value=_('Filter'),
+            type='submit')
+        self.helper.add_layout(
+            ExtendedLayout(
+                Div(Field('name'), css_class="col-sm-4"),
+                Div(Field('island'), css_class="col-sm-3"),
+                Div(Field('municipality'), css_class="col-sm-3"),
+                Div(filter_button, css_class="col-sm-2 valign-button-iform"),
+            )
+        )
+        super(ObservationBeachFilterForm, self).__init__(*args, **kwargs)
+        self.fields['municipality'].choices = get_municipality_choices()
 
         for key in self.fields:
             self.fields[key].label = self.fields[key].label.capitalize()

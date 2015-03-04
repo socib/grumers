@@ -17,7 +17,7 @@ django-compressor
 django-tables2
 django-crispy-forms
 django-bootstrap3-datetimepicker
-django-geojson
+django-geojson==2.6.0
 django-localeurl
 django-modeltranslation==0.7.3
 django-password-reset

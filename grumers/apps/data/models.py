@@ -102,6 +102,7 @@ class ObservationRoute(models.Model):
     route_type = models.CharField(_('type'), max_length=1,
                                   choices=ROUTE_TYPE_CHOICES,
                                   default='C')
+    use_incident_form = models.BooleanField(_('use incident form'), default=False)
     island = models.CharField(_('island'), max_length=15,
                               choices=ISLAND_CHOICES,
                               blank=True, null=True)
@@ -325,3 +326,91 @@ post_save.connect(
     assign_default_beach_groups,
     sender=ObservationRoute,
     dispatch_uid="assign_beach_groups")
+
+
+class FlagChange(models.Model):
+
+    NONE, RED, YELLOW, GREEN = ('N', 'R', 'Y', 'G')
+    FLAG_STATUS_CHOICES = (
+        (NONE, _('None')),
+        (RED, _('Red')),
+        (YELLOW, _('Yellow')),
+        (GREEN, _('Green')),
+    )
+
+    date = models.DateTimeField(_('date and time'))
+    observation_station = models.ForeignKey(ObservationStation, on_delete=models.PROTECT,
+                                            verbose_name=_('observation station'))
+    flag_status = models.CharField(_('flag status'), max_length=1,
+                                   choices=FLAG_STATUS_CHOICES,
+                                   default=NONE, blank=False)
+    jellyfish_flag = models.BooleanField(_('jellyfish flag'), default=False)
+    # Audit
+    created_on = models.DateTimeField(_('date added'), auto_now_add=True)
+    created_by = models.ForeignKey(User, blank=True, null=True,
+                                   editable=False, related_name='created-flag',
+                                   verbose_name=_('created by'))
+    updated_on = models.DateTimeField(_('date modified'), auto_now=True)
+    updated_by = models.ForeignKey(User, blank=True, null=True,
+                                   editable=False, related_name='updated-flag',
+                                   verbose_name=_('update by'))
+
+    class Meta:
+        verbose_name = _('flag change')
+        verbose_name_plural = _('flag changes')
+        ordering = ['-date']
+
+    def __unicode__(self):
+        return "{flag} flag on {date:%d/%m/%Y}".format(
+            flag=self.get_flag_status_display(),
+            date=self.date)
+
+    def save(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        self.updated_by = user
+        if not self.id:
+            self.created_by = user
+        return super(FlagChange, self).save(*args, **kwargs)
+
+
+class DailyReport(models.Model):
+    WEBFORM, API, BULK = ('W', 'A', 'B')
+    SOURCE_CHOICES = (
+        (WEBFORM, _('Web Form')),
+        (API, _('API')),
+        (BULK, _('Bulk upload')),
+    )
+
+    date_observed = models.DateField(_('date'))
+    observation_station = models.ForeignKey(ObservationStation, on_delete=models.PROTECT,
+                                            verbose_name=_('observation station'))
+    source = models.CharField(_('source'), max_length=2,
+                              choices=SOURCE_CHOICES,
+                              default=WEBFORM, blank=False)
+    sting_incidents = models.IntegerField(
+        _('total sting incidents'),
+        default=0, blank=True)
+    total_incidents = models.IntegerField(
+        _('total incidents'),
+        default=0, blank=True)
+    # Audit
+    created_on = models.DateTimeField(_('date added'), auto_now_add=True)
+    created_by = models.ForeignKey(User, blank=True, null=True,
+                                   editable=False, related_name='created-incident',
+                                   verbose_name=_('created by'))
+    updated_on = models.DateTimeField(_('date modified'), auto_now=True)
+    updated_by = models.ForeignKey(User, blank=True, null=True,
+                                   editable=False, related_name='updated-incident',
+                                   verbose_name=_('update by'))
+
+    class Meta:
+        verbose_name = _('daily report')
+        verbose_name_plural = _('daily report')
+        ordering = ['-date_observed']
+
+    def save(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        self.updated_by = user
+        if not self.id:
+            self.created_by = user
+        return super(DailyReport, self).save(*args, **kwargs)

@@ -5,12 +5,12 @@
 {% load geojson_tags %}
 {% load thumbnail %}
 
-{% block title_head %}{{ block.super }}: {% trans "Update Observation" %}{% endblock %}
+{% block title_head %}{{ block.super }}: {% trans "Update Daily Report" %}{% endblock %}
 
 {% block title %}
-{% trans "Update Observation" %}
+{% trans "Update Daily Report" %}
 {% if route %}
-  <span class="route">{{ route.name }}</span>
+  <span class="route"><a href="{% url 'data_route_dailyreport_list' route.pk %}">{{ route.name }}</a></span>
 {% endif %}
 {% endblock %}
 
@@ -23,14 +23,29 @@
     <h3 class="thin-title">{% trans "Map" %}</h3>
     <div id="map-route" style="width:100%; height:300px;">
     </div>
-    {% if object.picture %}
-        <h3>{% trans "Picture" %}</h3>
-        {% thumbnail object.picture "450" as im %}
-            <img src="{{ im.url }}">
-        {% endthumbnail %}
-    {% endif %}
   </div>
+  {% if object.pk %}
+  <div class="col-sm-12"> 
+    <h2>{% trans "Flag changes" %}</h2> 
+    <table class="table table-striped table-condensed">
+        <tr><th>{% trans "Date" %}</th><th>{% trans "Station" %}</th><th>{% trans "Flag" %}</th><th>{% trans "Jellyfish flag" %}</th></tr>
+        {% for flagchange in flagchanges %}
+        <tr><td><a href="{% if route %}{% url 'data_route_flagchange_update' route.pk flagchange.pk %}{% else %}{% url 'data_flagchange_update' flagchange.pk %}{% endif %}">{{ flagchange.date }}</a></td>
+            <td>{{ flagchange.observation_station }}</td>
+            <td>{{ flagchange.get_flag_status_display }}</td>
+            <td>{% if flagchange.jellyfish_flag %}<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>{% endif %}</td></tr>
+        {% endfor %}
+    </table>
+    <a class="btn btn-info" href="{% url 'data_route_flagchange_create' object.observation_station.observation_route.pk %}?station={{object.observation_station.name}}&date={{ object.date_observed|date:'Ymd' }}0000">
+    <i class="glyphicon glyphicon-plus"></i>
+    {% trans 'Add' %} {% trans 'flag change' %}
+    </a>
+  </div>
+  {% endif %}
+
+
 </div>
+
 {% endblock %}
 
 {% block page_js %}
